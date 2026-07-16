@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seguimiento de Objetivos Q3 — Julio 2026</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f5f5f5; padding: 20px; }
+.container { max-width: 1500px; margin: 0 auto; background: white; border-radius: 12px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+.header { text-align: center; margin-bottom: 25px; }
+.header h1 { color: #4a0e8f; font-size: 24px; margin-bottom: 5px; }
+.header .subtitle { color: #666; font-size: 14px; }
+.filter-section { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 20px; }
+.filter-section label { font-weight: 600; color: #333; }
+.filter-section select { padding: 8px 15px; border: 2px solid #4a0e8f; border-radius: 6px; font-size: 14px; font-weight: 600; min-width: 180px; }
+.semaforo-legend { display: flex; justify-content: center; gap: 20px; margin-bottom: 20px; flex-wrap: wrap; }
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #555; }
+.legend-dot { width: 16px; height: 16px; border-radius: 50%; display: inline-block; }
+.dot-green { background-color: #22c55e; }
+.dot-yellow { background-color: #f59e0b; }
+.dot-red { background-color: #ef4444; }
+.dot-gray { background-color: #9ca3af; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead tr { background: #4a0e8f; color: white; }
+thead th { padding: 12px 10px; text-align: center; font-weight: 600; font-size: 12px; border-right: 1px solid rgba(255,255,255,0.3); }
+thead th:last-child { border-right: none; }
+thead th:nth-child(1) { width: 4%; }
+thead th:nth-child(2) { width: 28%; }
+thead th:nth-child(3) { width: 12%; }
+thead th:nth-child(4) { width: 12%; }
+thead th:nth-child(5) { width: 12%; }
+thead th:nth-child(6) { width: 12%; }
+thead th:nth-child(7) { width: 10%; }
+thead th:nth-child(8) { width: 6%; }
+tbody tr { border-bottom: 1px solid #e5e7eb; }
+tbody tr:hover { background-color: #f9fafb; }
+tbody td { padding: 12px 10px; vertical-align: top; border-right: 1px solid #e5e7eb; }
+tbody td:last-child { border-right: none; }
+.objetivo-col { text-align: left; }
+.objetivo-col .titulo { font-weight: 600; color: #1f2937; margin-bottom: 4px; }
+.objetivo-col .metas { font-size: 12px; color: #6b7280; line-height: 1.4; }
+.meta-col { text-align: center; font-size: 12px; color: #374151; }
+.sprint-col { text-align: center; font-weight: 600; color: #374151; }
+.sprint-input { width: 50px; padding: 3px 4px; border: 2px solid #d1d5db; border-radius: 6px; text-align: center; font-size: 12px; font-weight: 600; transition: border-color 0.2s; }
+.sprint-input:focus { outline: none; border-color: #4a0e8f; }
+.metrica-row { margin-bottom: 6px; display: flex; align-items: center; gap: 3px; justify-content: center; }
+.metrica-label { font-size: 9px; color: #9ca3af; display: block; margin-top: 1px; }
+.valor-real { text-align: center; font-weight: 700; font-size: 14px; }
+.semaforo-col { text-align: center; vertical-align: middle; }
+.semaforo { width: 24px; height: 24px; border-radius: 50%; display: inline-block; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+.green { background-color: #22c55e; }
+.yellow { background-color: #f59e0b; }
+.red { background-color: #ef4444; }
+.gray { background-color: #9ca3af; }
+.progress-bar { width: 100%; height: 8px; background: #e5e7eb; border-radius: 4px; margin-top: 4px; }
+.progress-fill { height: 100%; border-radius: 4px; transition: width 0.3s; }
+.progress-green { background-color: #22c55e; }
+.progress-yellow { background-color: #f59e0b; }
+.progress-red { background-color: #ef4444; }
+.footer { margin-top: 20px; text-align: center; font-size: 12px; color: #9ca3af; }
+.nota-onedrive { background: #eff6ff; border: 1px solid #3b82f6; border-radius: 8px; padding: 10px 16px; margin-bottom: 20px; font-size: 12px; color: #1e40af; text-align: center; }
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<h1>&#127919; Seguimiento de Objetivos Q3 — Julio 2026</h1>
+<p class="subtitle">Programa BSS Invictus | Corte por Sprint | Semáforo automático</p>
+</div>
+<div class="nota-onedrive">
+&#128161; <strong>Nota:</strong> Para que los inputs funcionen correctamente, abre este archivo desde el Explorador de Windows (doble clic) — se abrirá en tu navegador local. El visor web de OneDrive bloquea scripts.
+</div>
+<div class="filter-section">
+<label>Filtrar por Célula:</label>
+<select id="filterCelula" onchange="filterTable()">
+<option value="TODAS">TODAS</option>
+<option value="POSTVENTA" selected>POSTVENTA</option>
+</select>
+</div>
+<div class="semaforo-legend">
+<div class="legend-item"><span class="legend-dot dot-green"></span> ≥ Meta esperada</div>
+<div class="legend-item"><span class="legend-dot dot-yellow"></span> Avanzó pero no llegó a meta (90-99%)</div>
+<div class="legend-item"><span class="legend-dot dot-red"></span> Sin avance / no llegó (&lt;90%)</div>
+<div class="legend-item"><span class="legend-dot dot-gray"></span> Sin dato</div>
+</div>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Objetivo / Indicador</th>
+<th>Meta Julio<br>(100%)</th>
+<th>Sprint 29<br>(17-Jul)</th>
+<th>Sprint 30<br>(25-Jul)</th>
+<th>Sprint 31<br>(31-Jul)</th>
+<th>Valor Real</th>
+<th>Semáforo</th>
+</tr>
+</thead>
+<tbody id="tableBody"></tbody>
+</table>
+<div class="footer">Última actualización: Julio 2026 | Generado automáticamente</div>
+</div>
+
+<script>
+const objetivos = [
+    {
+        celula: "POSTVENTA",
+        titulo: "Certificar funcionalmente el Drop 1",
+        metricas: [
+            { nombre: "SIT re ejecutado (Qv + legados)", meta29: 60, meta30: 80, meta31: 100 },
+            { nombre: "Aprobación", meta29: 60, meta30: 80, meta31: 100 },
+            { nombre: "Bugs críticos", meta29: 0, meta30: 0, meta31: 0, informativo: true }
+        ],
+        metaJulio: "100% SIT re ejecutado\n100% aprobación\n0 bugs críticos"
+    },
+    {
+        celula: "POSTVENTA",
+        titulo: "Certificar funcionalmente el Drop 2",
+        metricas: [
+            { nombre: "SIT ejecutado (Qv + legados)", meta29: 50, meta30: 75, meta31: 100 },
+            { nombre: "Aprobación", meta29: 40, meta30: 60, meta31: 80 },
+            { nombre: "Bugs críticos", meta29: 0, meta30: 0, meta31: 0, informativo: true }
+        ],
+        metaJulio: "100% SIT ejecutado\n≥80% aprobación\n0 bugs críticos, no críticos 70% con fechas"
+    },
+    {
+        celula: "POSTVENTA",
+        titulo: "Certificar usuario (UAT) Drop 1 y 2",
+        metricas: [
+            { nombre: "GdC entrega anticipada (≤5 días antes)", meta29: 50, meta30: 75, meta31: 100 },
+            { nombre: "Aprobación casos propuestos", meta29: 50, meta30: 70, meta31: 90 },
+            { nombre: "Acta UAT firmada", meta29: 0, meta30: 50, meta31: 100 }
+        ],
+        metaJulio: "100% GdC entrega anticipada\n≥90% aprobación casos\n100% acta UAT firmada"
+    },
+    {
+        celula: "POSTVENTA",
+        titulo: "Certificar E2E (alcance Drop 1 y Drop 2)",
+        metricas: [
+            { nombre: "E2E ejecutado (Qv + legados)", meta29: 30, meta30: 50, meta31: 70 },
+            { nombre: "Aprobación casos ejecutados", meta29: 50, meta30: 70, meta31: 90 }
+        ],
+        metaJulio: "70% E2E ejecutado\n≥90% aprobación casos ejecutados"
+    },
+    {
+        celula: "POSTVENTA",
+        titulo: "Preparar el Drop 3",
+        metricas: [
+            { nombre: "Data a probar", meta29: 40, meta30: 70, meta31: 100 }
+        ],
+        metaJulio: "100% de la data a probar"
+    },
+    {
+        celula: "POSTVENTA",
+        titulo: "Ejecutar pruebas funcionales de migración",
+        metricas: [
+            { nombre: "Pruebas migración D1 y D2 ejecutadas", meta29: 40, meta30: 70, meta31: 100 },
+            { nombre: "Bugs/problemas migración identificados", meta29: 0, meta30: 0, meta31: 0, informativo: true }
+        ],
+        metaJulio: "100% pruebas migración ejecutadas\nBugs/problemas identificados (info)"
+    },
+    {
+        celula: "POSTVENTA",
+        titulo: "Ejecutar pruebas no funcionales de legados",
+        metricas: [
+            { nombre: "Ejecutadas (soporte y seguimiento)", meta29: 40, meta30: 70, meta31: 100 }
+        ],
+        metaJulio: "100% ejecutadas (soporte y seguimiento)"
+    },
+    {
+        celula: "POSTVENTA",
+        titulo: "Cerrar funcionalidades mockeadas",
+        metricas: [
+            { nombre: "APIs des-mockeadas D1 y D2", meta29: 40, meta30: 70, meta31: 100 }
+        ],
+        metaJulio: "100% APIs des-mockeadas D1 y D2"
+    },
+    {
+        celula: "POSTVENTA",
+        titulo: "Preparar el pase a producción",
+        metricas: [
+            { nombre: "Runbooks validados y aprobados", meta29: 30, meta30: 60, meta31: 100 }
+        ],
+        metaJulio: "100% runbooks validados y aprobados"
+    },
+    {
+        celula: "POSTVENTA",
+        titulo: "Llevar a producción microservicios y landing",
+        metricas: [
+            { nombre: "Despliegue microservicios y Landings certificados D1 y D2", meta29: 30, meta30: 60, meta31: 100 }
+        ],
+        metaJulio: "100% despliegue certificados D1 y D2"
+    },
+    {
+        celula: "POSTVENTA",
+        titulo: "Cerrar desarrollos internos (legados)",
+        metricas: [
+            { nombre: "Desarrollos legados D1 y D2 cerrados", meta29: 40, meta30: 70, meta31: 100 }
+        ],
+        metaJulio: "100% desarrollos legados D1 y D2 cerrados"
+    },
+    {
+        celula: "POSTVENTA",
+        titulo: "Alistar ambientes y seguridad",
+        metricas: [
+            { nombre: "Ambientes y criterios de seguridad definidos D1 y D2", meta29: 50, meta30: 75, meta31: 100 }
+        ],
+        metaJulio: "100% ambientes y seguridad definidos D1 y D2"
+    }
+];
+
+objetivos.forEach(obj => {
+    obj.metricas.forEach(m => {
+        if (m.val29 === undefined) m.val29 = 0;
+        if (m.val30 === undefined) m.val30 = 0;
+        if (m.val31 === undefined) m.val31 = 0;
+    });
+});
+
+function calcularSemaforoObj(obj) {
+    let sprintActivo = null;
+    for (const m of obj.metricas) {
+        if (m.informativo) continue;
+        if (m.val31 > 0) { sprintActivo = 'sprint31'; break; }
+        if (m.val30 > 0 && sprintActivo !== 'sprint31') sprintActivo = 'sprint30';
+        if (m.val29 > 0 && !sprintActivo) sprintActivo = 'sprint29';
+    }
+    if (!sprintActivo) return "gray";
+
+    let sumaRatio = 0;
+    let count = 0;
+    let todosVerdes = true;
+
+    for (const m of obj.metricas) {
+        if (m.informativo) continue;
+        let valorReal = 0;
+        let metaEsperada = 0;
+
+        if (sprintActivo === 'sprint31') { valorReal = m.val31 || 0; metaEsperada = m.meta31; }
+        else if (sprintActivo === 'sprint30') { valorReal = m.val30 || 0; metaEsperada = m.meta30; }
+        else { valorReal = m.val29 || 0; metaEsperada = m.meta29; }
+
+        if (metaEsperada > 0) {
+            sumaRatio += (valorReal / metaEsperada);
+            count++;
+            if (valorReal < metaEsperada) todosVerdes = false;
+        }
+    }
+
+    if (todosVerdes) return "green";
+    const ratioPromedio = count > 0 ? (sumaRatio / count) : 0;
+    if (ratioPromedio < 0.9) return "red";
+    return "yellow";
+}
+
+function calcularValorReal(obj) {
+    let sprintActivo = null;
+    for (const m of obj.metricas) {
+        if (m.informativo) continue;
+        if (m.val31 > 0) { sprintActivo = 'sprint31'; break; }
+        if (m.val30 > 0 && sprintActivo !== 'sprint31') sprintActivo = 'sprint30';
+        if (m.val29 > 0 && !sprintActivo) sprintActivo = 'sprint29';
+    }
+    if (!sprintActivo) return 0;
+
+    let suma = 0;
+    let count = 0;
+    for (const m of obj.metricas) {
+        if (m.informativo) continue;
+        if (sprintActivo === 'sprint31') suma += (m.val31 || 0);
+        else if (sprintActivo === 'sprint30') suma += (m.val30 || 0);
+        else suma += (m.val29 || 0);
+        count++;
+    }
+    if (count === 0) return 0;
+    return Math.round(suma / count);
+}
+
+function getProgressClass(semaforo) {
+    switch(semaforo) {
+        case "green": return "progress-green";
+        case "yellow": return "progress-yellow";
+        case "red": return "progress-red";
+        default: return "progress-green";
+    }
+}
+
+function onMetricaChange(objIndex, metricaIndex, sprint, value) {
+    const valor = parseFloat(value) || 0;
+    objetivos[objIndex].metricas[metricaIndex][sprint] = valor;
+
+    const valorReal = calcularValorReal(objetivos[objIndex]);
+    const semaforo = calcularSemaforoObj(objetivos[objIndex]);
+
+    const valorEl = document.getElementById('valor-real-' + objIndex);
+    if (valorEl) valorEl.textContent = valorReal + "%";
+
+    const semaforoEl = document.getElementById('semaforo-' + objIndex);
+    if (semaforoEl) semaforoEl.className = 'semaforo ' + semaforo;
+
+    const progressEl = document.getElementById('progress-' + objIndex);
+    if (progressEl) {
+        progressEl.className = 'progress-fill ' + getProgressClass(semaforo);
+        progressEl.style.width = Math.min(valorReal, 100) + '%';
+    }
+    guardarDatos();
+}
+
+function guardarDatos() {
+    const datos = objetivos.map(function(o) { return o.metricas.map(function(m) { return { val29: m.val29, val30: m.val30, val31: m.val31 }; }); });
+    localStorage.setItem("objetivos_metricas_postventa_v3", JSON.stringify(datos));
+}
+
+function cargarDatos() {
+    const guardados = localStorage.getItem("objetivos_metricas_postventa_v3");
+    if (guardados) {
+        const datos = JSON.parse(guardados);
+        datos.forEach(function(metricas, i) {
+            if (i < objetivos.length) {
+                metricas.forEach(function(m, j) {
+                    if (j < objetivos[i].metricas.length) {
+                        objetivos[i].metricas[j].val29 = m.val29 || 0;
+                        objetivos[i].metricas[j].val30 = m.val30 || 0;
+                        objetivos[i].metricas[j].val31 = m.val31 || 0;
+                    }
+                });
+            }
+        });
+    }
+}
+
+function renderSprintInputs(objIndex, sprint) {
+    var obj = objetivos[objIndex];
+    var metaKey = sprint.replace('val', 'meta');
+    var html = '';
+    obj.metricas.forEach(function(m, mIdx) {
+        var val = m[sprint] || 0;
+        var meta = m[metaKey] || 0;
+        var esInformativo = m.informativo;
+        var sufijo = esInformativo ? '' : '%';
+        var metaTexto = esInformativo ? 'Info' : 'Meta: ' + meta + '%';
+
+        if (obj.metricas.length > 1) {
+            html += '<span class="metrica-label">' + m.nombre + ' | ' + metaTexto + '</span>';
+        } else {
+            html += '<span class="metrica-label">' + metaTexto + '</span>';
+        }
+        html += '<div class="metrica-row">' +
+            '<input type="number" class="sprint-input" min="0" max="' + (esInformativo ? '9999' : '100') + '" value="' + val + '"' +
+            ' onchange="onMetricaChange(' + objIndex + ', ' + mIdx + ', \'' + sprint + '\', this.value)"' +
+            ' oninput="onMetricaChange(' + objIndex + ', ' + mIdx + ', \'' + sprint + '\', this.value)">' +
+            sufijo +
+            '</div>';
+    });
+    return html;
+}
+
+function renderTable(data) {
+    var tbody = document.getElementById("tableBody");
+    tbody.innerHTML = "";
+
+    data.forEach(function(obj, index) {
+        var row = document.createElement("tr");
+        row.setAttribute("data-celula", obj.celula);
+
+        var metaJulioFormatted = obj.metaJulio.replace(/\n/g, "<br>");
+        var valorReal = calcularValorReal(obj);
+        var semaforo = calcularSemaforoObj(obj);
+        var metricasDesc = obj.metricas.map(function(m) { return '• ' + m.nombre + (m.informativo ? ' (info)' : ''); }).join("<br>");
+
+        row.innerHTML =
+            '<td style="text-align:center; font-weight:700; color:#4a0e8f;">' + (index + 1) + '</td>' +
+            '<td class="objetivo-col">' +
+                '<div class="titulo">' + obj.titulo + '</div>' +
+                '<div class="metas">' + metricasDesc + '</div>' +
+            '</td>' +
+            '<td class="meta-col">' + metaJulioFormatted + '</td>' +
+            '<td class="sprint-col">' + renderSprintInputs(index, 'val29') + '</td>' +
+            '<td class="sprint-col">' + renderSprintInputs(index, 'val30') + '</td>' +
+            '<td class="sprint-col">' + renderSprintInputs(index, 'val31') + '</td>' +
+            '<td class="valor-real">' +
+                '<span id="valor-real-' + index + '" style="font-size:16px;">' + valorReal + '%</span>' +
+                '<div class="progress-bar">' +
+                    '<div id="progress-' + index + '" class="progress-fill ' + getProgressClass(semaforo) + '" style="width: ' + Math.min(valorReal, 100) + '%"></div>' +
+                '</div>' +
+            '</td>' +
+            '<td class="semaforo-col">' +
+                '<span id="semaforo-' + index + '" class="semaforo ' + semaforo + '"></span>' +
+            '</td>';
+        tbody.appendChild(row);
+    });
+}
+
+function filterTable() {
+    var filter = document.getElementById("filterCelula").value;
+    if (filter === "TODAS") {
+        renderTable(objetivos);
+    } else {
+        renderTable(objetivos.filter(function(o) { return o.celula === filter; }));
+    }
+}
+
+cargarDatos();
+renderTable(objetivos);
+</script>
+</body>
+</html>
