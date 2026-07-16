@@ -59,7 +59,6 @@ tbody td:last-child { border-right: none; }
 .progress-yellow { background-color: #f59e0b; }
 .progress-red { background-color: #ef4444; }
 .footer { margin-top: 20px; text-align: center; font-size: 12px; color: #9ca3af; }
-.nota-onedrive { background: #eff6ff; border: 1px solid #3b82f6; border-radius: 8px; padding: 10px 16px; margin-bottom: 20px; font-size: 12px; color: #1e40af; text-align: center; }
 </style>
 </head>
 <body>
@@ -67,9 +66,6 @@ tbody td:last-child { border-right: none; }
 <div class="header">
 <h1>&#127919; Seguimiento de Objetivos Q3 — Julio 2026</h1>
 <p class="subtitle">Programa BSS Invictus | Corte por Sprint | Semáforo automático</p>
-</div>
-<div class="nota-onedrive">
-&#128161; <strong>Nota:</strong> Para que los inputs funcionen correctamente, abre este archivo desde el Explorador de Windows (doble clic) — se abrirá en tu navegador local. El visor web de OneDrive bloquea scripts.
 </div>
 <div class="filter-section">
 <label>Filtrar por Célula:</label>
@@ -103,45 +99,48 @@ tbody td:last-child { border-right: none; }
 </div>
 
 <script>
-const objetivos = [
+// ============================================================
+// OBJETIVOS CÉLULA POSTVENTA
+// ============================================================
+var objetivos = [
     {
         celula: "POSTVENTA",
         titulo: "Certificar funcionalmente el Drop 1",
         metricas: [
             { nombre: "SIT re ejecutado (Qv + legados)", meta29: 60, meta30: 80, meta31: 100 },
-            { nombre: "Aprobación", meta29: 60, meta30: 80, meta31: 100 },
-            { nombre: "Bugs críticos", meta29: 0, meta30: 0, meta31: 0, informativo: true }
+            { nombre: "Aprobaci\u00f3n", meta29: 60, meta30: 80, meta31: 100 },
+            { nombre: "Bugs cr\u00edticos", meta29: 0, meta30: 0, meta31: 0, informativo: true }
         ],
-        metaJulio: "100% SIT re ejecutado\n100% aprobación\n0 bugs críticos"
+        metaJulio: "100% SIT re ejecutado\n100% aprobaci\u00f3n\n0 bugs cr\u00edticos"
     },
     {
         celula: "POSTVENTA",
         titulo: "Certificar funcionalmente el Drop 2",
         metricas: [
             { nombre: "SIT ejecutado (Qv + legados)", meta29: 50, meta30: 75, meta31: 100 },
-            { nombre: "Aprobación", meta29: 40, meta30: 60, meta31: 80 },
-            { nombre: "Bugs críticos", meta29: 0, meta30: 0, meta31: 0, informativo: true }
+            { nombre: "Aprobaci\u00f3n", meta29: 40, meta30: 60, meta31: 80 },
+            { nombre: "Bugs cr\u00edticos", meta29: 0, meta30: 0, meta31: 0, informativo: true }
         ],
-        metaJulio: "100% SIT ejecutado\n≥80% aprobación\n0 bugs críticos, no críticos 70% con fechas"
+        metaJulio: "100% SIT ejecutado\n\u226580% aprobaci\u00f3n\n0 bugs cr\u00edticos, no cr\u00edticos 70% con fechas"
     },
     {
         celula: "POSTVENTA",
         titulo: "Certificar usuario (UAT) Drop 1 y 2",
         metricas: [
-            { nombre: "GdC entrega anticipada (≤5 días antes)", meta29: 50, meta30: 75, meta31: 100 },
-            { nombre: "Aprobación casos propuestos", meta29: 50, meta30: 70, meta31: 90 },
+            { nombre: "GdC entrega anticipada (\u22645 d\u00edas antes)", meta29: 50, meta30: 75, meta31: 100 },
+            { nombre: "Aprobaci\u00f3n casos propuestos", meta29: 50, meta30: 70, meta31: 90 },
             { nombre: "Acta UAT firmada", meta29: 0, meta30: 50, meta31: 100 }
         ],
-        metaJulio: "100% GdC entrega anticipada\n≥90% aprobación casos\n100% acta UAT firmada"
+        metaJulio: "100% GdC entrega anticipada\n\u226590% aprobaci\u00f3n casos\n100% acta UAT firmada"
     },
     {
         celula: "POSTVENTA",
         titulo: "Certificar E2E (alcance Drop 1 y Drop 2)",
         metricas: [
             { nombre: "E2E ejecutado (Qv + legados)", meta29: 30, meta30: 50, meta31: 70 },
-            { nombre: "Aprobación casos ejecutados", meta29: 50, meta30: 70, meta31: 90 }
+            { nombre: "Aprobaci\u00f3n casos ejecutados", meta29: 50, meta30: 70, meta31: 90 }
         ],
-        metaJulio: "70% E2E ejecutado\n≥90% aprobación casos ejecutados"
+        metaJulio: "70% E2E ejecutado\n\u226590% aprobaci\u00f3n casos ejecutados"
     },
     {
         celula: "POSTVENTA",
@@ -153,12 +152,12 @@ const objetivos = [
     },
     {
         celula: "POSTVENTA",
-        titulo: "Ejecutar pruebas funcionales de migración",
+        titulo: "Ejecutar pruebas funcionales de migraci\u00f3n",
         metricas: [
-            { nombre: "Pruebas migración D1 y D2 ejecutadas", meta29: 40, meta30: 70, meta31: 100 },
-            { nombre: "Bugs/problemas migración identificados", meta29: 0, meta30: 0, meta31: 0, informativo: true }
+            { nombre: "Pruebas migraci\u00f3n D1 y D2 ejecutadas", meta29: 40, meta30: 70, meta31: 100 },
+            { nombre: "Bugs/problemas migraci\u00f3n identificados", meta29: 0, meta30: 0, meta31: 0, informativo: true }
         ],
-        metaJulio: "100% pruebas migración ejecutadas\nBugs/problemas identificados (info)"
+        metaJulio: "100% pruebas migraci\u00f3n ejecutadas\nBugs/problemas identificados (info)"
     },
     {
         celula: "POSTVENTA",
@@ -178,7 +177,7 @@ const objetivos = [
     },
     {
         celula: "POSTVENTA",
-        titulo: "Preparar el pase a producción",
+        titulo: "Preparar el pase a producci\u00f3n",
         metricas: [
             { nombre: "Runbooks validados y aprobados", meta29: 30, meta30: 60, meta31: 100 }
         ],
@@ -186,7 +185,7 @@ const objetivos = [
     },
     {
         celula: "POSTVENTA",
-        titulo: "Llevar a producción microservicios y landing",
+        titulo: "Llevar a producci\u00f3n microservicios y landing",
         metricas: [
             { nombre: "Despliegue microservicios y Landings certificados D1 y D2", meta29: 30, meta30: 60, meta31: 100 }
         ],
@@ -209,18 +208,22 @@ const objetivos = [
         metaJulio: "100% ambientes y seguridad definidos D1 y D2"
     }
 ];
+// ============================================================
 
-objetivos.forEach(obj => {
-    obj.metricas.forEach(m => {
+// Inicializar valores
+for (var i = 0; i < objetivos.length; i++) {
+    for (var j = 0; j < objetivos[i].metricas.length; j++) {
+        var m = objetivos[i].metricas[j];
         if (m.val29 === undefined) m.val29 = 0;
         if (m.val30 === undefined) m.val30 = 0;
         if (m.val31 === undefined) m.val31 = 0;
-    });
-});
+    }
+}
 
 function calcularSemaforoObj(obj) {
-    let sprintActivo = null;
-    for (const m of obj.metricas) {
+    var sprintActivo = null;
+    for (var i = 0; i < obj.metricas.length; i++) {
+        var m = obj.metricas[i];
         if (m.informativo) continue;
         if (m.val31 > 0) { sprintActivo = 'sprint31'; break; }
         if (m.val30 > 0 && sprintActivo !== 'sprint31') sprintActivo = 'sprint30';
@@ -228,14 +231,15 @@ function calcularSemaforoObj(obj) {
     }
     if (!sprintActivo) return "gray";
 
-    let sumaRatio = 0;
-    let count = 0;
-    let todosVerdes = true;
+    var sumaRatio = 0;
+    var count = 0;
+    var todosVerdes = true;
 
-    for (const m of obj.metricas) {
+    for (var i = 0; i < obj.metricas.length; i++) {
+        var m = obj.metricas[i];
         if (m.informativo) continue;
-        let valorReal = 0;
-        let metaEsperada = 0;
+        var valorReal = 0;
+        var metaEsperada = 0;
 
         if (sprintActivo === 'sprint31') { valorReal = m.val31 || 0; metaEsperada = m.meta31; }
         else if (sprintActivo === 'sprint30') { valorReal = m.val30 || 0; metaEsperada = m.meta30; }
@@ -249,14 +253,15 @@ function calcularSemaforoObj(obj) {
     }
 
     if (todosVerdes) return "green";
-    const ratioPromedio = count > 0 ? (sumaRatio / count) : 0;
+    var ratioPromedio = count > 0 ? (sumaRatio / count) : 0;
     if (ratioPromedio < 0.9) return "red";
     return "yellow";
 }
 
 function calcularValorReal(obj) {
-    let sprintActivo = null;
-    for (const m of obj.metricas) {
+    var sprintActivo = null;
+    for (var i = 0; i < obj.metricas.length; i++) {
+        var m = obj.metricas[i];
         if (m.informativo) continue;
         if (m.val31 > 0) { sprintActivo = 'sprint31'; break; }
         if (m.val30 > 0 && sprintActivo !== 'sprint31') sprintActivo = 'sprint30';
@@ -264,9 +269,10 @@ function calcularValorReal(obj) {
     }
     if (!sprintActivo) return 0;
 
-    let suma = 0;
-    let count = 0;
-    for (const m of obj.metricas) {
+    var suma = 0;
+    var count = 0;
+    for (var i = 0; i < obj.metricas.length; i++) {
+        var m = obj.metricas[i];
         if (m.informativo) continue;
         if (sprintActivo === 'sprint31') suma += (m.val31 || 0);
         else if (sprintActivo === 'sprint30') suma += (m.val30 || 0);
@@ -278,28 +284,26 @@ function calcularValorReal(obj) {
 }
 
 function getProgressClass(semaforo) {
-    switch(semaforo) {
-        case "green": return "progress-green";
-        case "yellow": return "progress-yellow";
-        case "red": return "progress-red";
-        default: return "progress-green";
-    }
+    if (semaforo === "green") return "progress-green";
+    if (semaforo === "yellow") return "progress-yellow";
+    if (semaforo === "red") return "progress-red";
+    return "progress-green";
 }
 
 function onMetricaChange(objIndex, metricaIndex, sprint, value) {
-    const valor = parseFloat(value) || 0;
+    var valor = parseFloat(value) || 0;
     objetivos[objIndex].metricas[metricaIndex][sprint] = valor;
 
-    const valorReal = calcularValorReal(objetivos[objIndex]);
-    const semaforo = calcularSemaforoObj(objetivos[objIndex]);
+    var valorReal = calcularValorReal(objetivos[objIndex]);
+    var semaforo = calcularSemaforoObj(objetivos[objIndex]);
 
-    const valorEl = document.getElementById('valor-real-' + objIndex);
+    var valorEl = document.getElementById('valor-real-' + objIndex);
     if (valorEl) valorEl.textContent = valorReal + "%";
 
-    const semaforoEl = document.getElementById('semaforo-' + objIndex);
+    var semaforoEl = document.getElementById('semaforo-' + objIndex);
     if (semaforoEl) semaforoEl.className = 'semaforo ' + semaforo;
 
-    const progressEl = document.getElementById('progress-' + objIndex);
+    var progressEl = document.getElementById('progress-' + objIndex);
     if (progressEl) {
         progressEl.className = 'progress-fill ' + getProgressClass(semaforo);
         progressEl.style.width = Math.min(valorReal, 100) + '%';
@@ -308,25 +312,33 @@ function onMetricaChange(objIndex, metricaIndex, sprint, value) {
 }
 
 function guardarDatos() {
-    const datos = objetivos.map(function(o) { return o.metricas.map(function(m) { return { val29: m.val29, val30: m.val30, val31: m.val31 }; }); });
+    var datos = [];
+    for (var i = 0; i < objetivos.length; i++) {
+        var mets = [];
+        for (var j = 0; j < objetivos[i].metricas.length; j++) {
+            var m = objetivos[i].metricas[j];
+            mets.push({ val29: m.val29, val30: m.val30, val31: m.val31 });
+        }
+        datos.push(mets);
+    }
     localStorage.setItem("objetivos_metricas_postventa_v3", JSON.stringify(datos));
 }
 
 function cargarDatos() {
-    const guardados = localStorage.getItem("objetivos_metricas_postventa_v3");
+    var guardados = localStorage.getItem("objetivos_metricas_postventa_v3");
     if (guardados) {
-        const datos = JSON.parse(guardados);
-        datos.forEach(function(metricas, i) {
+        var datos = JSON.parse(guardados);
+        for (var i = 0; i < datos.length; i++) {
             if (i < objetivos.length) {
-                metricas.forEach(function(m, j) {
+                for (var j = 0; j < datos[i].length; j++) {
                     if (j < objetivos[i].metricas.length) {
-                        objetivos[i].metricas[j].val29 = m.val29 || 0;
-                        objetivos[i].metricas[j].val30 = m.val30 || 0;
-                        objetivos[i].metricas[j].val31 = m.val31 || 0;
+                        objetivos[i].metricas[j].val29 = datos[i][j].val29 || 0;
+                        objetivos[i].metricas[j].val30 = datos[i][j].val30 || 0;
+                        objetivos[i].metricas[j].val31 = datos[i][j].val31 || 0;
                     }
-                });
+                }
             }
-        });
+        }
     }
 }
 
@@ -334,7 +346,8 @@ function renderSprintInputs(objIndex, sprint) {
     var obj = objetivos[objIndex];
     var metaKey = sprint.replace('val', 'meta');
     var html = '';
-    obj.metricas.forEach(function(m, mIdx) {
+    for (var mIdx = 0; mIdx < obj.metricas.length; mIdx++) {
+        var m = obj.metricas[mIdx];
         var val = m[sprint] || 0;
         var meta = m[metaKey] || 0;
         var esInformativo = m.informativo;
@@ -346,13 +359,13 @@ function renderSprintInputs(objIndex, sprint) {
         } else {
             html += '<span class="metrica-label">' + metaTexto + '</span>';
         }
-        html += '<div class="metrica-row">' +
-            '<input type="number" class="sprint-input" min="0" max="' + (esInformativo ? '9999' : '100') + '" value="' + val + '"' +
-            ' onchange="onMetricaChange(' + objIndex + ', ' + mIdx + ', \'' + sprint + '\', this.value)"' +
-            ' oninput="onMetricaChange(' + objIndex + ', ' + mIdx + ', \'' + sprint + '\', this.value)">' +
-            sufijo +
-            '</div>';
-    });
+        html += '<div class="metrica-row">';
+        html += '<input type="number" class="sprint-input" min="0" max="' + (esInformativo ? '9999' : '100') + '" value="' + val + '"';
+        html += ' onchange="onMetricaChange(' + objIndex + ', ' + mIdx + ', \'' + sprint + '\', this.value)"';
+        html += ' oninput="onMetricaChange(' + objIndex + ', ' + mIdx + ', \'' + sprint + '\', this.value)">';
+        html += sufijo;
+        html += '</div>';
+    }
     return html;
 }
 
@@ -360,14 +373,19 @@ function renderTable(data) {
     var tbody = document.getElementById("tableBody");
     tbody.innerHTML = "";
 
-    data.forEach(function(obj, index) {
+    for (var index = 0; index < data.length; index++) {
+        var obj = data[index];
         var row = document.createElement("tr");
         row.setAttribute("data-celula", obj.celula);
 
         var metaJulioFormatted = obj.metaJulio.replace(/\n/g, "<br>");
         var valorReal = calcularValorReal(obj);
         var semaforo = calcularSemaforoObj(obj);
-        var metricasDesc = obj.metricas.map(function(m) { return '• ' + m.nombre + (m.informativo ? ' (info)' : ''); }).join("<br>");
+        var metricasArr = [];
+        for (var k = 0; k < obj.metricas.length; k++) {
+            metricasArr.push('&bull; ' + obj.metricas[k].nombre + (obj.metricas[k].informativo ? ' (info)' : ''));
+        }
+        var metricasDesc = metricasArr.join("<br>");
 
         row.innerHTML =
             '<td style="text-align:center; font-weight:700; color:#4a0e8f;">' + (index + 1) + '</td>' +
@@ -389,7 +407,7 @@ function renderTable(data) {
                 '<span id="semaforo-' + index + '" class="semaforo ' + semaforo + '"></span>' +
             '</td>';
         tbody.appendChild(row);
-    });
+    }
 }
 
 function filterTable() {
@@ -397,7 +415,11 @@ function filterTable() {
     if (filter === "TODAS") {
         renderTable(objetivos);
     } else {
-        renderTable(objetivos.filter(function(o) { return o.celula === filter; }));
+        var filtered = [];
+        for (var i = 0; i < objetivos.length; i++) {
+            if (objetivos[i].celula === filter) filtered.push(objetivos[i]);
+        }
+        renderTable(filtered);
     }
 }
 
