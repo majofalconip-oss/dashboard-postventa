@@ -119,7 +119,13 @@ tbody tr.na-row .sprint-input { background: #eee; pointer-events: none; color: #
 <tbody id="tableBody"></tbody>
 </table>
 </div>
-<div class="footer">Última actualización: Julio 2026 | Generado automáticamente</div>
+<div class="footer">
+<div id="syncStatus" style="margin-bottom:8px; font-size:12px; color:#666;">💾 Datos locales</div>
+<div id="footerInfo" style="margin-bottom:8px; font-size:12px; color:#9ca3af;">Última actualización: —</div>
+<div style="margin-bottom:8px;">
+    <button onclick="sincronizarManual()" id="btnSync" style="padding:6px 14px;border:1px solid #22c55e;border-radius:6px;background:#fff;color:#22c55e;cursor:pointer;font-size:12px;font-weight:600;display:none;">🔄 Sincronizar ahora</button>
+</div>
+</div>
 </div>
 
 <script>
@@ -188,25 +194,29 @@ const objetivos = [
             { nombre: "E2E ejecutado (Qv + legados)", meta29: 30, meta30: 50, meta31: 70 },
             { nombre: "Aprobación casos ejecutados", meta29: 50, meta30: 70, meta31: 90 }
         ],
-        metaJulio: "70% E2E ejecutado\n≥90% aprobación casos ejecutados"
+        metaJulio: "70% E2E ejecutado\n≥90% aprobación casos ejecutados",
+        noAplicaJulio: true,
+        mesEjecucion: "Agosto"
     },
     {
         celula: "POSTVENTA",
         og: "OG 2: Certificar la solución BSS de punta a punta, asegurando SIT, UAT, pruebas E2E, roles, accesos y calidad funcional de los Drops 1 al 4.",
         titulo: "Preparar el Drop 3",
         metricas: [
-            { nombre: "Data a probar", meta29: 40, meta30: 70, meta31: 100 }
+            { nombre: "Data a probar", meta29: 50, meta30: 0, meta31: 100 }
         ],
-        metaJulio: "100% de la data a probar"
+        metaJulio: "100% de la data a probar",
+        bloquearSprints: [30]
     },
     {
         celula: "POSTVENTA",
         og: "OG 3: Validar la transición técnica y de datos garantizando migración, legados, ambientes, seguridad, pruebas no funcionales y capacidad de rollback.",
         titulo: "Ejecutar pruebas no funcionales de legados",
         metricas: [
-            { nombre: "Ejecutadas (soporte y seguimiento)", meta29: 40, meta30: 70, meta31: 100 }
+            { nombre: "Ejecutadas (soporte y seguimiento)", meta29: 0, meta30: 0, meta31: 100 }
         ],
-        metaJulio: "100% ejecutadas (soporte y seguimiento)"
+        metaJulio: "100% ejecutadas (soporte y seguimiento)",
+        bloquearSprints: [29, 30]
     },
     {
         celula: "POSTVENTA",
@@ -369,36 +379,241 @@ function onMetricaChange(objIndex, metricaIndex, sprint, value) {
         progressEl.className = `progress-fill ${getProgressClass(semaforo)}`;
         progressEl.style.width = `${Math.min(valorReal, 100)}%`;
     }
-    guardarDatos();
+    guardarDatosDebounce();
 }
 
-function guardarDatos() {
-    const datos = objetivos.map(o => o.metricas.map(m => ({ val29: m.val29, val30: m.val30, val31: m.val31 })));
+// ============================================================
+// SINCRONIZACIÓN - JSONBIN.IO
+// ============================================================
+const JSONBIN_CONFIG = {
+    binId: "6a5fed21f5f4af5e29ae6b6b",
+    apiKey: "$2a$10$yQ7KdQ4xrm/jzeSCnB7nD.9McPbiMyJUB8.zOo3catOQaRDty./8W"
+};
+
+// Estado global de sincronización
+let usuarioEditando = false;
+let debounceTimer = null;
+let ultimoUpdatedAt = null;
+let syncInterval = null;
+
+// Obtener nombre del usuario (deshabilitado)
+function obtenerNombreUsuario() {
+    return "";
+}
+
+function getJsonBinConfig() {
+    if (JSONBIN_CONFIG.binId !== "TU_BIN_ID_AQUI" && JSONBIN_CONFIG.apiKey !== "TU_API_KEY_AQUI") {
+        return JSONBIN_CONFIG;
+    }
+    return null;
+}
+
+function actualizarStatusUI(texto, color) {
+    const el = document.getElementById("syncStatus");
+    if (el) { el.textContent = texto; el.style.color = color || "#666"; }
+}
+
+function actualizarFooterInfo(updatedAt, updatedBy) {
+    const el = document.getElementById("footerInfo");
+    if (!el) return;
+    if (updatedAt) {
+        const fecha = new Date(updatedAt);
+        const fechaStr = fecha.toLocaleDateString("es-EC", { day: "2-digit", month: "2-digit", year: "numeric" });
+        const horaStr = fecha.toLocaleTimeString("es-EC", { hour: "2-digit", minute: "2-digit" });
+        el.textContent = `Última actualización: ${fechaStr} ${horaStr}`;
+    } else {
+        el.textContent = "Última actualización: —";
+    }
+}
+
+function obtenerDatosActuales() {
+    return objetivos.map(o => o.metricas.map(m => ({ val29: m.val29, val30: m.val30, val31: m.val31 })));
+}
+
+function datosIguales(a, b) {
+    return JSON.stringify(a) === JSON.stringify(b);
+}
+
+// Guardar en localStorage
+function guardarLocal(datos) {
     localStorage.setItem("objetivos_metricas_postventa_v4", JSON.stringify(datos));
 }
 
+// Cargar desde localStorage
 function cargarDatos() {
     const guardados = localStorage.getItem("objetivos_metricas_postventa_v4");
     if (guardados) {
-        const datos = JSON.parse(guardados);
-        datos.forEach((metricas, i) => {
-            if (i < objetivos.length) {
-                metricas.forEach((m, j) => {
-                    if (j < objetivos[i].metricas.length) {
-                        objetivos[i].metricas[j].val29 = m.val29 || 0;
-                        objetivos[i].metricas[j].val30 = m.val30 || 0;
-                        objetivos[i].metricas[j].val31 = m.val31 || 0;
-                    }
-                });
-            }
-        });
+        aplicarDatos(JSON.parse(guardados));
     }
 }
+
+function aplicarDatos(datos) {
+    datos.forEach((metricas, i) => {
+        if (i < objetivos.length) {
+            metricas.forEach((m, j) => {
+                if (j < objetivos[i].metricas.length) {
+                    objetivos[i].metricas[j].val29 = m.val29 || 0;
+                    objetivos[i].metricas[j].val30 = m.val30 || 0;
+                    objetivos[i].metricas[j].val31 = m.val31 || 0;
+                }
+            });
+        }
+    });
+}
+
+// Debounce para guardar (500ms)
+function guardarDatosDebounce() {
+    if (debounceTimer) clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+        const datos = obtenerDatosActuales();
+        guardarLocal(datos);
+        guardarEnNube(datos);
+    }, 500);
+}
+
+// Guardar en JSONBin
+async function guardarEnNube(datos) {
+    const config = getJsonBinConfig();
+    if (!config) return;
+    try {
+        actualizarStatusUI("🟡 Guardando...", "#f59e0b");
+        const nombre = obtenerNombreUsuario();
+        const ahora = new Date().toISOString();
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${config.binId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "X-Master-Key": config.apiKey
+            },
+            body: JSON.stringify({ metricas: datos, updatedAt: ahora, updatedBy: nombre })
+        });
+        if (res.ok) {
+            ultimoUpdatedAt = ahora;
+            actualizarStatusUI("🟢 Conectado", "#22c55e");
+            actualizarFooterInfo(ahora, nombre);
+        } else {
+            actualizarStatusUI("🔴 Error al guardar", "#ef4444");
+        }
+    } catch(e) {
+        actualizarStatusUI("🔴 Sin conexión", "#ef4444");
+    }
+}
+
+// Cargar desde JSONBin
+async function cargarDesdeNube(forzarRender) {
+    const config = getJsonBinConfig();
+    if (!config) return false;
+    try {
+        if (!forzarRender) actualizarStatusUI("🔵 Sincronizando...", "#60a5fa");
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${config.binId}/latest`, {
+            headers: { "X-Master-Key": config.apiKey }
+        });
+        if (res.ok) {
+            const json = await res.json();
+            const record = json.record;
+            const datos = record.metricas;
+            const remoteUpdatedAt = record.updatedAt || null;
+            const remoteUpdatedBy = record.updatedBy || null;
+
+            if (!datos) {
+                actualizarStatusUI("🟢 Conectado", "#22c55e");
+                return false;
+            }
+
+            // Solo actualizar si hay cambios reales
+            if (remoteUpdatedAt && remoteUpdatedAt !== ultimoUpdatedAt) {
+                const datosLocales = obtenerDatosActuales();
+                if (!datosIguales(datos, datosLocales)) {
+                    aplicarDatos(datos);
+                    guardarLocal(datos);
+                    ultimoUpdatedAt = remoteUpdatedAt;
+                    actualizarFooterInfo(remoteUpdatedAt, remoteUpdatedBy);
+                    actualizarStatusUI("🟢 Conectado", "#22c55e");
+                    return true; // Indica que hay que re-renderizar
+                } else {
+                    ultimoUpdatedAt = remoteUpdatedAt;
+                }
+            }
+
+            actualizarFooterInfo(remoteUpdatedAt, remoteUpdatedBy);
+            actualizarStatusUI("🟢 Conectado", "#22c55e");
+            return forzarRender;
+        }
+        actualizarStatusUI("🔴 Error de conexión", "#ef4444");
+    } catch(e) {
+        actualizarStatusUI("🔴 Sin conexión", "#ef4444");
+    }
+    return false;
+}
+
+// Sincronización manual
+async function sincronizarManual() {
+    const necesitaRender = await cargarDesdeNube(true);
+    if (necesitaRender) {
+        filterTable();
+    }
+}
+
+// Sincronización automática cada 10 segundos
+function iniciarSyncAutomatico() {
+    const config = getJsonBinConfig();
+    if (!config) return;
+    syncInterval = setInterval(async () => {
+        if (usuarioEditando) return; // No sincronizar mientras edita
+        const necesitaRender = await cargarDesdeNube(false);
+        if (necesitaRender) {
+            filterTable();
+        }
+    }, 10000);
+}
+
+// Detectar cuando el usuario está editando
+document.addEventListener("focusin", function(e) {
+    if (e.target && e.target.classList && e.target.classList.contains("sprint-input")) {
+        usuarioEditando = true;
+    }
+});
+document.addEventListener("focusout", function(e) {
+    if (e.target && e.target.classList && e.target.classList.contains("sprint-input")) {
+        usuarioEditando = false;
+    }
+});
+
+// Inicialización
+async function inicializarApp() {
+    cargarDatos(); // Cargar local primero
+    const config = getJsonBinConfig();
+    if (config) {
+        document.getElementById("btnSync").style.display = "inline-block";
+        const necesitaRender = await cargarDesdeNube(true);
+        if (necesitaRender) {
+            renderTable(objetivos);
+        } else {
+            renderTable(objetivos);
+        }
+        iniciarSyncAutomatico();
+    } else {
+        actualizarStatusUI("⚠️ JSONBin no configurado — editá JSONBIN_CONFIG en el HTML", "#f59e0b");
+        renderTable(objetivos);
+    }
+}
+
+inicializarApp();
 
 function renderSprintInputs(objIndex, sprint) {
     const obj = objetivos[objIndex];
     const metaKey = sprint.replace('val', 'meta');
+    const sprintNum = parseInt(sprint.replace('val', ''));
+    const iniciaSprint = obj.iniciaSprint || 29;
+    const bloquearSprints = obj.bloquearSprints || [];
+    const estaBloqueado = bloquearSprints.includes(sprintNum);
     let html = '';
+
+    if (sprintNum < iniciaSprint) {
+        html = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#d1d5db;font-size:12px;">—</div>`;
+        return html;
+    }
+
     obj.metricas.forEach((m, mIdx) => {
         const val = m[sprint] || 0;
         const meta = m[metaKey] || 0;
@@ -411,12 +626,20 @@ function renderSprintInputs(objIndex, sprint) {
         } else {
             html += `<span class="metrica-label">${metaTexto}</span>`;
         }
-        html += `<div class="metrica-row">
-            <input type="number" class="sprint-input" min="0" max="${esInformativo ? '9999' : '100'}" value="${val}"
-                onchange="onMetricaChange(${objIndex}, ${mIdx}, '${sprint}', this.value)"
-                oninput="onMetricaChange(${objIndex}, ${mIdx}, '${sprint}', this.value)">
-            <span style="display:inline-block;width:10px;text-align:left;">${sufijo}</span>
-        </div>`;
+
+        if (estaBloqueado) {
+            html += `<div class="metrica-row">
+                <input type="number" class="sprint-input" value="0" disabled style="background:#eee;color:#bbb;border-color:#e5e7eb;pointer-events:none;">
+                <span style="display:inline-block;width:10px;text-align:left;">${sufijo}</span>
+            </div>`;
+        } else {
+            html += `<div class="metrica-row">
+                <input type="number" class="sprint-input" min="0" max="${esInformativo ? '9999' : '100'}" value="${val}"
+                    onchange="onMetricaChange(${objIndex}, ${mIdx}, '${sprint}', this.value)"
+                    oninput="onMetricaChange(${objIndex}, ${mIdx}, '${sprint}', this.value)">
+                <span style="display:inline-block;width:10px;text-align:left;">${sufijo}</span>
+            </div>`;
+        }
     });
     return html;
 }
@@ -492,8 +715,7 @@ function filterTable() {
     }
 }
 
-cargarDatos();
-renderTable(objetivos);
+// La inicialización ya se ejecutó en inicializarApp()
 </script>
 </body>
 </html>
