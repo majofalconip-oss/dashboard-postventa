@@ -1,19 +1,25 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Seguimiento de Objetivos Q3 — Julio 2026</title>
+<title>Seguimiento de Objetivos Q3 — 2026</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; padding: 24px; }
-.container { max-width: 1600px; margin: 0 auto; background: white; border-radius: 14px; padding: 36px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+.container { max-width: 1700px; margin: 0 auto; background: white; border-radius: 14px; padding: 36px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
 .header { text-align: center; margin-bottom: 28px; }
 .header h1 { color: #4a0e8f; font-size: 26px; margin-bottom: 6px; letter-spacing: -0.3px; }
 .header .subtitle { color: #666; font-size: 14px; }
 .filter-section { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 22px; }
 .filter-section label { font-weight: 600; color: #333; font-size: 14px; }
 .filter-section select { padding: 8px 16px; border: 2px solid #4a0e8f; border-radius: 6px; font-size: 14px; font-weight: 600; min-width: 180px; background: #fff; cursor: pointer; }
+.avance-general { display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 22px; padding: 16px; background: #f9f5ff; border-radius: 10px; border: 1px solid #e9d5ff; }
+.avance-general .avance-label { font-size: 14px; font-weight: 600; color: #4a0e8f; }
+.avance-general .avance-valor { font-size: 28px; font-weight: 800; color: #4a0e8f; }
+.avance-general .avance-bar { width: 200px; height: 12px; background: #e5e7eb; border-radius: 6px; overflow: hidden; }
+.avance-general .avance-fill { height: 100%; border-radius: 6px; background: #4a0e8f; transition: width 0.4s; }
+.avance-general .avance-detalle { font-size: 12px; color: #666; }
 .semaforo-legend { display: flex; justify-content: center; gap: 24px; margin-bottom: 24px; flex-wrap: wrap; }
 .legend-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #555; }
 .legend-dot { width: 14px; height: 14px; border-radius: 50%; display: inline-block; box-shadow: 0 1px 3px rgba(0,0,0,0.15); }
@@ -21,21 +27,13 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-
 .dot-yellow { background-color: #f59e0b; }
 .dot-red { background-color: #ef4444; }
 .dot-gray { background-color: #9ca3af; }
+.dot-blue { background-color: #60a5fa; }
 
 .table-wrapper { overflow-x: auto; border-radius: 10px; border: 1px solid #e5e7eb; }
 table { width: 100%; border-collapse: collapse; font-size: 13px; table-layout: fixed; }
 thead tr { background: #4a0e8f; color: white; }
 thead th { padding: 14px 10px; text-align: center; font-weight: 600; font-size: 12px; border-right: 1px solid rgba(255,255,255,0.2); white-space: nowrap; }
 thead th:last-child { border-right: none; }
-thead th:nth-child(1) { width: 3.5%; }
-thead th:nth-child(2) { width: 16%; }
-thead th:nth-child(3) { width: 18%; }
-thead th:nth-child(4) { width: 11%; }
-thead th:nth-child(5) { width: 13%; }
-thead th:nth-child(6) { width: 13%; }
-thead th:nth-child(7) { width: 13%; }
-thead th:nth-child(8) { width: 8%; }
-thead th:nth-child(9) { width: 5.5%; }
 
 tbody tr { border-bottom: 1px solid #f0f0f0; transition: border-left 0.15s ease; }
 tbody tr:hover { border-left: 4px solid #4a0e8f; background-color: #fcfaff; }
@@ -72,28 +70,47 @@ tbody td:last-child { border-right: none; }
 
 .footer { margin-top: 24px; text-align: center; font-size: 12px; color: #9ca3af; }
 
+.mes-btn { padding: 8px 20px; border: 2px solid #4a0e8f; border-radius: 20px; background: #fff; color: #4a0e8f; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+.mes-btn:hover { background: #f5f0ff; }
+.mes-btn.active { background: #4a0e8f; color: #fff; }
+
+.resumen-section { text-align: center; margin-bottom: 16px; }
+.resumen-section .promedio-valor { font-size: 48px; font-weight: 800; color: #4a0e8f; }
+.resumen-section .promedio-label { font-size: 14px; color: #666; margin-bottom: 16px; }
+.barras-container { display: flex; align-items: flex-end; justify-content: center; gap: 12px; flex-wrap: wrap; padding: 16px 0; }
+.barra-item { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.barra-item .barra-valor { font-size: 11px; font-weight: 700; }
+.barra-item .barra { width: 50px; border-radius: 6px 6px 0 0; transition: height 0.4s; min-height: 8px; }
+.barra-item .barra-label { font-size: 9px; color: #666; text-align: center; max-width: 60px; word-wrap: break-word; }
+.meses-previos { display: flex; justify-content: center; gap: 24px; margin-top: 12px; padding: 12px; background: #f9fafb; border-radius: 8px; }
+.mes-previo-item { text-align: center; }
+.mes-previo-item .mp-label { font-size: 11px; color: #666; }
+.mes-previo-item .mp-valor { font-size: 20px; font-weight: 700; color: #4a0e8f; }
+
 .na-badge { display: inline-block; background: #dbeafe; color: #1e40af; font-size: 10.5px; font-weight: 600; padding: 3px 8px; border-radius: 4px; }
 .nuevo-badge { display: inline-block; background: #7c3aed; color: #fff; font-size: 9.5px; font-weight: 700; padding: 2px 6px; border-radius: 4px; margin-left: 6px; vertical-align: middle; }
+.arrastre-badge { display: inline-block; background: #7c3aed; color: #fff; font-size: 8px; font-weight: 600; padding: 2px 5px; border-radius: 4px; margin-left: 6px; vertical-align: middle; }
 tbody tr.na-row > td { opacity: 0.5; }
 tbody tr.na-row > td.og-col { opacity: 1; }
 tbody tr.na-row .sprint-input { background: #eee; pointer-events: none; color: #bbb; border-color: #e5e7eb; }
 .semaforo.blue { background-color: #60a5fa; }
-.dot-blue { background-color: #60a5fa; }
+.cierre-jul-col { text-align: center; font-size: 12px; color: #374151; vertical-align: middle; }
+.cierre-jul-input { width: 44px; padding: 4px 3px; border: 1.5px solid #c4b5fd; border-radius: 6px; text-align: center; font-size: 12px; font-weight: 600; background: #f5f0ff; color: #4a0e8f; }
 </style>
 </head>
 <body>
 <div class="container">
 <div class="header">
-<h1>🎯 Seguimiento de Objetivos Q3 — Julio 2026</h1>
-<p class="subtitle">Programa BSS Invictus | Corte por Sprint | Semáforo automático</p>
+<h1 id="mainTitle">🎯 Seguimiento de Objetivos Q3 — Julio 2026</h1>
+<p class="subtitle">Programa BSS Invictus | Célula Postventa | Corte por Sprint | Semáforo automático</p>
 </div>
-<div class="filter-section">
-<label>Filtrar por Célula:</label>
-<select id="filterCelula" onchange="filterTable()">
-<option value="TODAS">TODAS</option>
-<option value="POSTVENTA" selected>POSTVENTA</option>
-</select>
+<div class="filter-section" style="flex-direction:column;gap:12px;">
+<div style="display:flex;align-items:center;gap:8px;">
+<label>FILTRAR POR MES</label>
 </div>
+<div id="mesBotones" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;"></div>
+</div>
+<div id="dashboardResumen" style="margin-bottom:24px;"></div>
 <div class="semaforo-legend">
 <div class="legend-item"><span class="legend-dot dot-green"></span> ≥ Meta esperada</div>
 <div class="legend-item"><span class="legend-dot dot-yellow"></span> Avanzó pero no llegó a meta</div>
@@ -102,20 +119,8 @@ tbody tr.na-row .sprint-input { background: #eee; pointer-events: none; color: #
 <div class="legend-item"><span class="legend-dot dot-blue"></span> No aplica este mes</div>
 </div>
 <div class="table-wrapper">
-<table>
-<thead>
-<tr>
-<th>#</th>
-<th>Objetivo General</th>
-<th>Objetivo Específico</th>
-<th>Meta Julio</th>
-<th>Sprint 29<br>(17-Jul)</th>
-<th>Sprint 30<br>(25-Jul)</th>
-<th>Sprint 31<br>(31-Jul)</th>
-<th>Valor Real</th>
-<th>Semáforo</th>
-</tr>
-</thead>
+<table id="mainTable">
+<thead id="tableHead"></thead>
 <tbody id="tableBody"></tbody>
 </table>
 </div>
@@ -130,226 +135,145 @@ tbody tr.na-row .sprint-input { background: #eee; pointer-events: none; color: #
 
 <script>
 // ============================================================
-// ⬇️ OBJETIVOS CÉLULA POSTVENTA ⬇️
+// CONFIGURACIÓN DE SPRINTS POR MES
 // ============================================================
-const objetivos = [
-    {
-        celula: "POSTVENTA",
-        og: "OG 1: Asegurar la preparación funcional y operativa de Postventa para la salida a producción, mediante validación con Key Users, gestión de brechas, comunicación de cambios y fortalecimiento de la adopción operativa.",
-        titulo: "Definir y estructurar el modelo funcional de gestión de interacciones y casos de Postventa",
-        metricas: [
-            { nombre: "Modelo funcional definido y estructurado", meta29: 40, meta30: 70, meta31: 100 }
-        ],
-        metaJulio: "100%",
-        ocultarMetricas: true,
-        esNuevo: true
-    },
-    {
-        celula: "POSTVENTA",
-        og: "OG 1: Asegurar la preparación funcional y operativa de Postventa para la salida a producción, mediante validación con Key Users, gestión de brechas, comunicación de cambios y fortalecimiento de la adopción operativa.",
-        titulo: "Validar la viabilidad operativa del modelo e identificar dependencias para su implementación",
-        metricas: [
-            { nombre: "Viabilidad operativa validada y dependencias identificadas", meta29: 40, meta30: 70, meta31: 100 }
-        ],
-        metaJulio: "100%",
-        ocultarMetricas: true,
-        esNuevo: true
-    },
-    {
-        celula: "POSTVENTA",
-        og: "OG 2: Certificar la solución BSS de punta a punta, asegurando SIT, UAT, pruebas E2E, roles, accesos y calidad funcional de los Drops 1 al 4.",
-        titulo: "Certificar funcionalmente el Drop 1",
-        metricas: [
-            { nombre: "SIT re ejecutado (Qv + legados)", meta29: 60, meta30: 80, meta31: 100 },
-            { nombre: "Aprobación", meta29: 60, meta30: 80, meta31: 100 },
-            { nombre: "Bugs críticos", meta29: 0, meta30: 0, meta31: 0, informativo: true }
-        ],
-        metaJulio: "100% SIT reejecutado\n100% aprobación\n0 bugs críticos"
-    },
-    {
-        celula: "POSTVENTA",
-        og: "OG 2: Certificar la solución BSS de punta a punta, asegurando SIT, UAT, pruebas E2E, roles, accesos y calidad funcional de los Drops 1 al 4.",
-        titulo: "Certificar funcionalmente el Drop 2",
-        metricas: [
-            { nombre: "SIT ejecutado (Qv + legados)", meta29: 50, meta30: 75, meta31: 100 },
-            { nombre: "Aprobación", meta29: 40, meta30: 60, meta31: 80 },
-            { nombre: "Bugs críticos", meta29: 0, meta30: 0, meta31: 0, informativo: true }
-        ],
-        metaJulio: "100% SIT ejecutado\n≥80% aprobación\n0 bugs críticos; 70% no críticos con fechas"
-    },
-    {
-        celula: "POSTVENTA",
-        og: "OG 2: Certificar la solución BSS de punta a punta, asegurando SIT, UAT, pruebas E2E, roles, accesos y calidad funcional de los Drops 1 al 4.",
-        titulo: "Certificar usuario (UAT) Drop 1 y 2",
-        metricas: [
-            { nombre: "Aprobación casos propuestos", meta29: 50, meta30: 70, meta31: 90 }
-        ],
-        metaJulio: "≥90% aprobación de casos propuestos"
-    },
-    {
-        celula: "POSTVENTA",
-        og: "OG 2: Certificar la solución BSS de punta a punta, asegurando SIT, UAT, pruebas E2E, roles, accesos y calidad funcional de los Drops 1 al 4.",
-        titulo: "Certificar E2E – alcance Drop 1 y Drop 2",
-        metricas: [
-            { nombre: "E2E ejecutado (Qv + legados)", meta29: 30, meta30: 50, meta31: 70 },
-            { nombre: "Aprobación casos ejecutados", meta29: 50, meta30: 70, meta31: 90 }
-        ],
-        metaJulio: "70% E2E ejecutado\n≥90% aprobación casos ejecutados",
-        noAplicaJulio: true,
-        mesEjecucion: "Agosto"
-    },
-    {
-        celula: "POSTVENTA",
-        og: "OG 2: Certificar la solución BSS de punta a punta, asegurando SIT, UAT, pruebas E2E, roles, accesos y calidad funcional de los Drops 1 al 4.",
-        titulo: "Preparar el Drop 3",
-        metricas: [
-            { nombre: "Data a probar", meta29: 50, meta30: 0, meta31: 100 }
-        ],
-        metaJulio: "100% de la data a probar",
-        bloquearSprints: [30]
-    },
-    {
-        celula: "POSTVENTA",
-        og: "OG 3: Validar la transición técnica y de datos garantizando migración, legados, ambientes, seguridad, pruebas no funcionales y capacidad de rollback.",
-        titulo: "Ejecutar pruebas no funcionales de legados",
-        metricas: [
-            { nombre: "Ejecutadas (soporte y seguimiento)", meta29: 0, meta30: 0, meta31: 100 }
-        ],
-        metaJulio: "100% ejecutadas (soporte y seguimiento)",
-        bloquearSprints: [29, 30]
-    },
-    {
-        celula: "POSTVENTA",
-        og: "OG 3: Validar la transición técnica y de datos garantizando migración, legados, ambientes, seguridad, pruebas no funcionales y capacidad de rollback.",
-        titulo: "Alistar ambientes y seguridad",
-        metricas: [
-            { nombre: "Ambientes y criterios de seguridad definidos D1 y D2", meta29: 50, meta30: 75, meta31: 100 }
-        ],
-        metaJulio: "100% ambientes y seguridad definidos D1 y D2"
-    },
-    {
-        celula: "POSTVENTA",
-        og: "OG 3: Validar la transición técnica y de datos garantizando migración, legados, ambientes, seguridad, pruebas no funcionales y capacidad de rollback.",
-        titulo: "Ejecutar pruebas funcionales de migración",
-        metricas: [
-            { nombre: "Pruebas migración D1 y D2 ejecutadas", meta29: 40, meta30: 70, meta31: 100 },
-            { nombre: "Bugs/problemas migración identificados", meta29: 0, meta30: 0, meta31: 0, informativo: true }
-        ],
-        metaJulio: "100% pruebas migración ejecutadas\nBugs/problemas identificados (info)",
-        noAplicaJulio: true,
-        mesEjecucion: "Agosto"
-    },
-    {
-        celula: "POSTVENTA",
-        og: "OG 3: Validar la transición técnica y de datos garantizando migración, legados, ambientes, seguridad, pruebas no funcionales y capacidad de rollback.",
-        titulo: "Cerrar desarrollos internos (legados)",
-        metricas: [
-            { nombre: "Desarrollos legados D1 y D2 cerrados", meta29: 40, meta30: 70, meta31: 100 }
-        ],
-        metaJulio: "100% desarrollos legados D1 y D2 cerrados",
-        noAplicaJulio: true,
-        mesEjecucion: "Agosto"
-    },
-    {
-        celula: "POSTVENTA",
-        og: "OG 3: Validar la transición técnica y de datos garantizando migración, legados, ambientes, seguridad, pruebas no funcionales y capacidad de rollback.",
-        titulo: "Cerrar funcionalidades mockeadas",
-        metricas: [
-            { nombre: "APIs des-mockeadas D1 y D2", meta29: 40, meta30: 70, meta31: 100 }
-        ],
-        metaJulio: "100% APIs des-mockeadas D1 y D2",
-        noAplicaJulio: true,
-        mesEjecucion: "Agosto"
-    },
-    {
-        celula: "POSTVENTA",
-        og: "OG 4: Asegurar una salida a producción controlada, mediante gestión de bloqueantes, Runbook, Code Freeze, Go/No-Go, Cutover, Rollback y habilitación operativa.",
-        titulo: "Preparar el pase a producción",
-        metricas: [
-            { nombre: "Runbooks validados y aprobados", meta29: 30, meta30: 60, meta31: 100 }
-        ],
-        metaJulio: "100% runbooks validados y aprobados"
-    },
-    {
-        celula: "POSTVENTA",
-        og: "OG 4: Asegurar una salida a producción controlada, mediante gestión de bloqueantes, Runbook, Code Freeze, Go/No-Go, Cutover, Rollback y habilitación operativa.",
-        titulo: "Llevar a producción microservicios y landing",
-        metricas: [
-            { nombre: "Despliegue microservicios y Landings certificados D1 y D2", meta29: 30, meta30: 60, meta31: 100 }
-        ],
-        metaJulio: "100% despliegue certificados D1 y D2"
-    }
-];
-// ============================================================
-// ⬆️ FIN DE OBJETIVOS ⬆️
-// ============================================================
+const SPRINTS_POR_MES = {
+    julio: [
+        { num: 29, fecha: "17-Jul" },
+        { num: 30, fecha: "25-Jul" },
+        { num: 31, fecha: "31-Jul" }
+    ],
+    agosto: [
+        { num: 32, fecha: "7-Ago" },
+        { num: 33, fecha: "14-Ago" },
+        { num: 34, fecha: "21-Ago" },
+        { num: 35, fecha: "28-Ago" }
+    ],
+    septiembre: [
+        { num: 36, fecha: "4-Sep" },
+        { num: 37, fecha: "11-Sep" },
+        { num: 38, fecha: "18-Sep" }
+    ]
+};
 
-// Inicializar valores en 0 para cada métrica
-objetivos.forEach(obj => {
-    obj.metricas.forEach(m => {
-        if (m.val29 === undefined) m.val29 = 0;
-        if (m.val30 === undefined) m.val30 = 0;
-        if (m.val31 === undefined) m.val31 = 0;
+const MESES_LABEL = { julio: "Julio 2026", agosto: "Agosto 2026", septiembre: "Septiembre 2026" };
+let mesActual = "agosto";
+
+// ============================================================
+// OBJETIVOS POR MES
+// ============================================================
+const OBJETIVOS_POR_MES = {
+julio: [
+    { og: "OG 1: Asegurar la preparación funcional y operativa de Postventa para la salida a producción, mediante validación con Key Users, gestión de brechas, comunicación de cambios y fortalecimiento de la adopción operativa.", titulo: "Definir y estructurar el modelo funcional de gestión de interacciones y casos de Postventa", metricas: [{ nombre: "Entrega de plantilla funcional de Case Management", metas: {29:40,30:70,31:100} }], metaJulio: "100%", esNuevo: true },
+    { og: "OG 1: Asegurar la preparación funcional y operativa de Postventa para la salida a producción, mediante validación con Key Users, gestión de brechas, comunicación de cambios y fortalecimiento de la adopción operativa.", titulo: "Validar la viabilidad operativa del modelo e identificar dependencias para su implementación", metricas: [{ nombre: "Brechas y dependencias identificadas y documentadas", metas: {29:40,30:70,31:100} }], metaJulio: "100%", esNuevo: true },
+    { og: "OG 2: Certificar la solución BSS de punta a punta, asegurando SIT, UAT, pruebas E2E, roles, accesos y calidad funcional de los Drops 1 al 4.", titulo: "Certificar funcionalmente el Drop 1", metricas: [{ nombre: "SIT re ejecutado (Qv + legados)", metas: {29:60,30:80,31:100} },{ nombre: "Aprobación", metas: {29:60,30:80,31:100} },{ nombre: "Bugs críticos", metas: {29:0,30:0,31:0}, informativo: true }], metaJulio: "100% SIT reejecutado\n100% aprobación\n0 bugs críticos", noAplica: true },
+    { og: "OG 2: Certificar la solución BSS de punta a punta, asegurando SIT, UAT, pruebas E2E, roles, accesos y calidad funcional de los Drops 1 al 4.", titulo: "Certificar funcionalmente el Drop 2", metricas: [{ nombre: "SIT ejecutado (Qv + legados)", metas: {29:50,30:75,31:100} },{ nombre: "Aprobación", metas: {29:40,30:60,31:80} },{ nombre: "Bugs críticos", metas: {29:0,30:0,31:0}, informativo: true },{ nombre: "No críticos con fechas", metas: {29:30,30:50,31:70} }], metaJulio: "100% SIT ejecutado\n≥80% aprobación\n0 bugs críticos\n70% no críticos con fechas" },
+    { og: "OG 2: Certificar la solución BSS de punta a punta, asegurando SIT, UAT, pruebas E2E, roles, accesos y calidad funcional de los Drops 1 al 4.", titulo: "Certificar usuario (UAT) Drop 1 y 2", metricas: [{ nombre: "GdC entrega anticipada (5 días antes)", metas: {29:50,30:75,31:100} },{ nombre: "Aprobación casos propuestos", metas: {29:50,30:70,31:90} },{ nombre: "Actas firmadas", metas: {29:30,30:60,31:100} }], metaJulio: "100% GdC entrega anticipada\n≥90% aprobación\n100% actas firmadas" },
+    { og: "OG 2: Certificar la solución BSS de punta a punta, asegurando SIT, UAT, pruebas E2E, roles, accesos y calidad funcional de los Drops 1 al 4.", titulo: "Certificar E2E – alcance Drop 1 y Drop 2", metricas: [{ nombre: "E2E ejecutado (Qv + legados)", metas: {29:30,30:50,31:70} },{ nombre: "Aprobación casos ejecutados", metas: {29:50,30:70,31:90} }], metaJulio: "70% E2E ejecutado\n≥90% aprobación", noAplica: true },
+    { og: "OG 2: Certificar la solución BSS de punta a punta, asegurando SIT, UAT, pruebas E2E, roles, accesos y calidad funcional de los Drops 1 al 4.", titulo: "Preparar el Drop 3", metricas: [{ nombre: "Data a probar", metas: {29:50,30:0,31:100} }], metaJulio: "100% de la data a probar", bloquearSprints: [30] },
+    { og: "OG 3: Validar la transición técnica y de datos garantizando migración, legados, ambientes, seguridad, pruebas no funcionales y capacidad de rollback.", titulo: "Ejecutar pruebas no funcionales de legados", metricas: [{ nombre: "Ejecutadas (soporte y seguimiento)", metas: {29:0,30:0,31:100} }], metaJulio: "100% ejecutadas", bloquearSprints: [29,30] },
+    { og: "OG 3: Validar la transición técnica y de datos garantizando migración, legados, ambientes, seguridad, pruebas no funcionales y capacidad de rollback.", titulo: "Alistar ambientes y seguridad", metricas: [{ nombre: "Ambientes y criterios definidos D1 y D2", metas: {29:50,30:75,31:100} }], metaJulio: "100% ambientes y seguridad definidos" },
+    { og: "OG 3: Validar la transición técnica y de datos garantizando migración, legados, ambientes, seguridad, pruebas no funcionales y capacidad de rollback.", titulo: "Ejecutar pruebas funcionales de migración", metricas: [{ nombre: "Pruebas migración D1 y D2 ejecutadas", metas: {29:40,30:70,31:100} },{ nombre: "Bugs/problemas migración", metas: {29:0,30:0,31:0}, informativo: true }], metaJulio: "100% pruebas migración", noAplica: true },
+    { og: "OG 3: Validar la transición técnica y de datos garantizando migración, legados, ambientes, seguridad, pruebas no funcionales y capacidad de rollback.", titulo: "Cerrar desarrollos internos (legados)", metricas: [{ nombre: "Desarrollos legados D1 y D2 cerrados", metas: {29:40,30:70,31:100} }], metaJulio: "100% legados cerrados", noAplica: true },
+    { og: "OG 3: Validar la transición técnica y de datos garantizando migración, legados, ambientes, seguridad, pruebas no funcionales y capacidad de rollback.", titulo: "Cerrar funcionalidades mockeadas", metricas: [{ nombre: "APIs des-mockeadas D1 y D2", metas: {29:40,30:70,31:100} }], metaJulio: "100% APIs des-mockeadas", noAplica: true },
+    { og: "OG 4: Asegurar una salida a producción controlada, mediante gestión de bloqueantes, Runbook, Code Freeze, Go/No-Go, Cutover, Rollback y habilitación operativa.", titulo: "Preparar el pase a producción", metricas: [{ nombre: "Runbooks validados y aprobados", metas: {29:30,30:60,31:100} }], metaJulio: "100% runbooks validados" },
+    { og: "OG 4: Asegurar una salida a producción controlada, mediante gestión de bloqueantes, Runbook, Code Freeze, Go/No-Go, Cutover, Rollback y habilitación operativa.", titulo: "Llevar a producción microservicios y landing", metricas: [{ nombre: "Despliegue certificados D1 y D2", metas: {29:30,30:60,31:100} }], metaJulio: "100% despliegue certificados" }
+],
+agosto: [
+    // OG 1
+    { og: "OG 1: Asegurar la preparación funcional y operativa de Postventa para la salida a producción, mediante validación con Key Users, gestión de brechas, comunicación de cambios y fortalecimiento de la adopción operativa.", titulo: "Definir y estructurar el modelo funcional de gestión de interacciones y casos de Postventa", metricas: [{ nombre: "Entrega de plantilla funcional de Case Management", metas: {32:90,33:100,34:0,35:0} }], metaMes: "100%", arrastrado: true, vaciarSprints:[34,35] },
+    { og: "OG 1: Asegurar la preparación funcional y operativa de Postventa para la salida a producción, mediante validación con Key Users, gestión de brechas, comunicación de cambios y fortalecimiento de la adopción operativa.", titulo: "Validar la preparación funcional de Postventa con Key Users y Superchampions", metricas: [{ nombre: "Preparación funcional validada", metas: {32:25,33:50,34:75,35:100} }], metaMes: "100%", ocultarMetricas: true },
+    { og: "OG 1: Asegurar la preparación funcional y operativa de Postventa para la salida a producción, mediante validación con Key Users, gestión de brechas, comunicación de cambios y fortalecimiento de la adopción operativa.", titulo: "Gestionar brechas y ajustar los habilitadores operativos para producción", metricas: [{ nombre: "Brechas gestionadas y habilitadores ajustados", metas: {32:25,33:50,34:75,35:100} }], metaMes: "100%", ocultarMetricas: true },
+    // OG 2
+    { og: "OG 2: Certificar la solución BSS de punta a punta, asegurando SIT, UAT, pruebas E2E, roles, accesos y calidad funcional de los Drops 1 al 4.", titulo: "Certificar usuario (UAT) Drop 1 y 2", metricas: [{ nombre: "Actas firmadas", metas: {32:100,33:0,34:0,35:0} }], metaMes: "100% actas firmadas", arrastrado: true, vaciarSprints:[33,34,35] },
+    { og: "OG 2: Certificar la solución BSS de punta a punta, asegurando SIT, UAT, pruebas E2E, roles, accesos y calidad funcional de los Drops 1 al 4.", titulo: "Certificar funcionalmente el Drop 1, incluyendo roles y accesos", metricas: [{ nombre: "SIT (Qv + legados)", metas: {32:0,33:50,34:75,35:100} },{ nombre: "Aprobación", metas: {32:0,33:50,34:75,35:100} },{ nombre: "Bugs críticos", metas: {32:0,33:0,34:0,35:0}, informativo: true },{ nombre: "No críticos con fechas", metas: {32:0,33:40,34:70,35:100} }], metaMes: "100% SIT reejecutado\n100% aprobación\n0 bugs críticos\n100% no críticos con fechas", bloquearSprints:[32] },
+    { og: "OG 2: Certificar la solución BSS de punta a punta, asegurando SIT, UAT, pruebas E2E, roles, accesos y calidad funcional de los Drops 1 al 4.", titulo: "Certificar funcionalmente el Drop 2, incluyendo roles y accesos", metricas: [{ nombre: "SIT (Qv + legados)", metas: {32:0,33:50,34:75,35:100} },{ nombre: "Aprobación", metas: {32:0,33:50,34:75,35:100} },{ nombre: "Bugs críticos", metas: {32:0,33:0,34:0,35:0}, informativo: true },{ nombre: "No críticos con fechas", metas: {32:0,33:40,34:70,35:100} }], metaMes: "100% SIT ejecutado\n100% aprobación\n0 bugs críticos\n100% no críticos con fechas", bloquearSprints:[32] },
+    { og: "OG 2: Certificar la solución BSS de punta a punta, asegurando SIT, UAT, pruebas E2E, roles, accesos y calidad funcional de los Drops 1 al 4.", titulo: "Certificar funcionalmente el Drop 3, incluyendo roles y accesos", metricas: [{ nombre: "SIT (Qv + legados)", metas: {32:0,33:40,34:70,35:100} },{ nombre: "Aprobación", metas: {32:0,33:35,34:60,35:80} },{ nombre: "Bugs críticos", metas: {32:0,33:0,34:0,35:0}, informativo: true },{ nombre: "No críticos con fechas", metas: {32:0,33:25,34:50,35:70} }], metaMes: "100% SIT ejecutado\n≥80% aprobación\n0 bugs críticos\n70% no críticos con fechas", bloquearSprints:[32] },
+    { og: "OG 2: Certificar la solución BSS de punta a punta, asegurando SIT, UAT, pruebas E2E, roles, accesos y calidad funcional de los Drops 1 al 4.", titulo: "Certificar usuario (UAT) Drop 3", metricas: [{ nombre: "Sesión 1:1", metas: {32:0,33:0,34:50,35:100} },{ nombre: "Envío de escenarios", metas: {32:0,33:0,34:100,35:0} },{ nombre: "Aprobación", metas: {32:0,33:0,34:50,35:98} },{ nombre: "Acta Firmada", metas: {32:0,33:0,34:50,35:100} }], metaMes: "100% sesiones\n100% envío escenarios\n≥98% aprobación\n100% acta firmada", bloquearSprints:[32,33] },
+    { og: "OG 2: Certificar la solución BSS de punta a punta, asegurando SIT, UAT, pruebas E2E, roles, accesos y calidad funcional de los Drops 1 al 4.", titulo: "Certificar E2E – alcance Drop 1 al Drop 3", metricas: [{ nombre: "E2E (Qv + legados)", metas: {32:25,33:50,34:65,35:80} },{ nombre: "Aprobación", metas: {32:30,33:55,34:75,35:90} }], metaMes: "80% E2E ejecutado\n≥90% aprobación" },
+    { og: "OG 2: Certificar la solución BSS de punta a punta, asegurando SIT, UAT, pruebas E2E, roles, accesos y calidad funcional de los Drops 1 al 4.", titulo: "Preparar el Drop 4", metricas: [{ nombre: "Data a probar", metas: {32:0,33:35,34:65,35:100} }], metaMes: "100% de la data a probar", bloquearSprints:[32] },
+    // OG 3
+    { og: "OG 3: Validar la transición técnica y de datos garantizando migración, legados, ambientes, seguridad, pruebas no funcionales y capacidad de rollback.", titulo: "Ejecutar pruebas no funcionales de legados", metricas: [{ nombre: "Ejecutadas (soporte y seguimiento)", metas: {32:100,33:0,34:0,35:0} }], metaMes: "100% ejecutadas", arrastrado: true, vaciarSprints:[33,34,35] },
+    { og: "OG 3: Validar la transición técnica y de datos garantizando migración, legados, ambientes, seguridad, pruebas no funcionales y capacidad de rollback.", titulo: "Alistar ambientes y seguridad", metricas: [{ nombre: "Ambientes y criterios definidos D1 y D2", metas: {32:100,33:0,34:0,35:0} }], metaMes: "100% ambientes definidos", arrastrado: true, vaciarSprints:[33,34,35] },
+    { og: "OG 3: Validar la transición técnica y de datos garantizando migración, legados, ambientes, seguridad, pruebas no funcionales y capacidad de rollback.", titulo: "Cerrar desarrollos internos (legados)", metricas: [{ nombre: "Desarrollos legados D3 cerrados", metas: {32:0,33:40,34:70,35:100} }], metaMes: "100% legados D3 cerrados", bloquearSprints:[32] },
+    { og: "OG 3: Validar la transición técnica y de datos garantizando migración, legados, ambientes, seguridad, pruebas no funcionales y capacidad de rollback.", titulo: "Cerrar funcionalidades mockeadas", metricas: [{ nombre: "APIs des-mockeadas D3", metas: {32:0,33:40,34:70,35:100} }], metaMes: "100% APIs des-mockeadas D3", bloquearSprints:[32] },
+    { og: "OG 3: Validar la transición técnica y de datos garantizando migración, legados, ambientes, seguridad, pruebas no funcionales y capacidad de rollback.", titulo: "Ensayar Rollback (Dry Run)", metricas: [{ nombre: "Ensayo ejecutado y documentado", metas: {32:25,33:50,34:75,35:100} }], metaMes: "100% ensayo ejecutado y documentado" },
+    { og: "OG 3: Validar la transición técnica y de datos garantizando migración, legados, ambientes, seguridad, pruebas no funcionales y capacidad de rollback.", titulo: "Ejecutar pruebas funcionales de migración", metricas: [{ nombre: "Pruebas migración D1-D3 ejecutadas", metas: {32:0,33:0,34:0,35:0} },{ nombre: "Bugs migración D3 identificados", metas: {32:0,33:0,34:0,35:0}, informativo: true },{ nombre: "Bugs migración D1-D2 resueltos", metas: {32:0,33:0,34:0,35:0}, informativo: true }], metaMes: "100% pruebas ejecutadas", noAplica: true },
+    // OG 4
+    { og: "OG 4: Asegurar una salida a producción controlada, mediante gestión de bloqueantes, Runbook, Code Freeze, Go/No-Go, Cutover, Rollback y habilitación operativa.", titulo: "Llevar a producción microservicios y landing (D1 y D2)", metricas: [{ nombre: "Despliegue certificados D1 y D2", metas: {32:100,33:0,34:0,35:0} }], metaMes: "100% despliegue certificados", arrastrado: true, vaciarSprints:[33,34,35] },
+    { og: "OG 4: Asegurar una salida a producción controlada, mediante gestión de bloqueantes, Runbook, Code Freeze, Go/No-Go, Cutover, Rollback y habilitación operativa.", titulo: "Documentar Runbook de Cutover / Rollback", metricas: [{ nombre: "Runbook documentado y en revisión", metas: {32:30,33:50,34:70,35:90} }], metaMes: "90% documentado y en revisión" },
+    { og: "OG 4: Asegurar una salida a producción controlada, mediante gestión de bloqueantes, Runbook, Code Freeze, Go/No-Go, Cutover, Rollback y habilitación operativa.", titulo: "Preparar el pase a producción", metricas: [{ nombre: "Scripts automatización reapuntamiento canales", metas: {32:25,33:50,34:75,35:100} }], metaMes: "100% scripts generados" },
+    { og: "OG 4: Asegurar una salida a producción controlada, mediante gestión de bloqueantes, Runbook, Code Freeze, Go/No-Go, Cutover, Rollback y habilitación operativa.", titulo: "Llevar a producción microservicios y landing (D3)", metricas: [{ nombre: "Despliegue certificados D3", metas: {32:25,33:50,34:75,35:100} }], metaMes: "100% despliegue certificados D3" }
+],
+septiembre: []
+};
+
+// ============================================================
+// LÓGICA DE CÁLCULOS
+// ============================================================
+function getObjetivos() { return OBJETIVOS_POR_MES[mesActual] || []; }
+function getSprints() { return SPRINTS_POR_MES[mesActual] || []; }
+
+function initValores(objetivos, sprints) {
+    objetivos.forEach(obj => {
+        obj.metricas.forEach(m => {
+            sprints.forEach(s => {
+                const key = `val${s.num}`;
+                if (m[key] === undefined) m[key] = 0;
+            });
+            if (m.cierreJul === undefined) m.cierreJul = 0;
+        });
     });
-});
+}
 
-function calcularSemaforoObj(obj) {
+function calcularSemaforoObj(obj, sprints) {
+    if (obj.noAplica) return "blue";
     let sprintActivo = null;
-    for (const m of obj.metricas) {
-        if (m.informativo) continue;
-        if (m.val31 > 0) { sprintActivo = 'sprint31'; break; }
-        if (m.val30 > 0 && sprintActivo !== 'sprint31') sprintActivo = 'sprint30';
-        if (m.val29 > 0 && !sprintActivo) sprintActivo = 'sprint29';
+    for (let i = sprints.length - 1; i >= 0; i--) {
+        const key = `val${sprints[i].num}`;
+        for (const m of obj.metricas) {
+            if (m.informativo) continue;
+            if ((m[key] || 0) > 0) { sprintActivo = sprints[i].num; break; }
+        }
+        if (sprintActivo) break;
     }
     if (!sprintActivo) return "gray";
-
-    let sumaRatio = 0;
-    let count = 0;
-    let todosVerdes = true;
-
+    let sumaRatio = 0, count = 0, todosVerdes = true;
     for (const m of obj.metricas) {
         if (m.informativo) continue;
-        let valorReal = 0;
-        let metaEsperada = 0;
-
-        if (sprintActivo === 'sprint31') { valorReal = m.val31 || 0; metaEsperada = m.meta31; }
-        else if (sprintActivo === 'sprint30') { valorReal = m.val30 || 0; metaEsperada = m.meta30; }
-        else { valorReal = m.val29 || 0; metaEsperada = m.meta29; }
-
-        if (metaEsperada > 0) {
-            sumaRatio += (valorReal / metaEsperada);
-            count++;
-            if (valorReal < metaEsperada) todosVerdes = false;
-        }
+        const val = m[`val${sprintActivo}`] || 0;
+        const meta = m.metas[sprintActivo] || 0;
+        if (meta > 0) { sumaRatio += val / meta; count++; if (val < meta) todosVerdes = false; }
     }
-
-    if (todosVerdes) return "green";
-    const ratioPromedio = count > 0 ? (sumaRatio / count) : 0;
-    if (ratioPromedio < 0.9) return "red";
+    if (todosVerdes && count > 0) return "green";
+    const ratio = count > 0 ? sumaRatio / count : 0;
+    if (ratio < 0.9) return "red";
     return "yellow";
 }
 
-function calcularValorReal(obj) {
+function calcularValorReal(obj, sprints) {
+    if (obj.noAplica) return null;
     let sprintActivo = null;
-    for (const m of obj.metricas) {
-        if (m.informativo) continue;
-        if (m.val31 > 0) { sprintActivo = 'sprint31'; break; }
-        if (m.val30 > 0 && sprintActivo !== 'sprint31') sprintActivo = 'sprint30';
-        if (m.val29 > 0 && !sprintActivo) sprintActivo = 'sprint29';
+    for (let i = sprints.length - 1; i >= 0; i--) {
+        const key = `val${sprints[i].num}`;
+        for (const m of obj.metricas) {
+            if (m.informativo) continue;
+            if ((m[key] || 0) > 0) { sprintActivo = sprints[i].num; break; }
+        }
+        if (sprintActivo) break;
     }
     if (!sprintActivo) return 0;
-
-    let suma = 0;
-    let count = 0;
+    let suma = 0, count = 0;
     for (const m of obj.metricas) {
         if (m.informativo) continue;
-        if (sprintActivo === 'sprint31') suma += (m.val31 || 0);
-        else if (sprintActivo === 'sprint30') suma += (m.val30 || 0);
-        else suma += (m.val29 || 0);
+        suma += (m[`val${sprintActivo}`] || 0);
         count++;
     }
-    if (count === 0) return 0;
-    return Math.round(suma / count);
+    return count > 0 ? Math.round(suma / count) : 0;
+}
+
+function actualizarAvanceGeneral() {
+    renderDashboardResumen();
 }
 
 function getProgressClass(semaforo) {
@@ -357,365 +281,376 @@ function getProgressClass(semaforo) {
         case "green": return "progress-green";
         case "yellow": return "progress-yellow";
         case "red": return "progress-red";
-        default: return "progress-green";
+        default: return "";
     }
-}
-
-function onMetricaChange(objIndex, metricaIndex, sprint, value) {
-    const valor = parseFloat(value) || 0;
-    objetivos[objIndex].metricas[metricaIndex][sprint] = valor;
-
-    const valorReal = calcularValorReal(objetivos[objIndex]);
-    const semaforo = calcularSemaforoObj(objetivos[objIndex]);
-
-    const valorEl = document.getElementById(`valor-real-${objIndex}`);
-    if (valorEl) valorEl.textContent = valorReal + "%";
-
-    const semaforoEl = document.getElementById(`semaforo-${objIndex}`);
-    if (semaforoEl) semaforoEl.className = `semaforo ${semaforo}`;
-
-    const progressEl = document.getElementById(`progress-${objIndex}`);
-    if (progressEl) {
-        progressEl.className = `progress-fill ${getProgressClass(semaforo)}`;
-        progressEl.style.width = `${Math.min(valorReal, 100)}%`;
-    }
-    guardarDatosDebounce();
 }
 
 // ============================================================
-// SINCRONIZACIÓN - JSONBIN.IO
+// RENDERIZADO
+// ============================================================
+function renderHeader() {
+    const sprints = getSprints();
+    const hasCierreJul = getObjetivos().some(o => o.arrastrado);
+    let html = `<tr><th style="width:3%">#</th><th style="width:14%">Objetivo General</th><th style="width:16%">Objetivo Específico</th>`;
+    if (hasCierreJul) html += `<th style="width:6%">Julio</th>`;
+    html += `<th style="width:9%">Meta ${MESES_LABEL[mesActual].split(' ')[0]}</th>`;
+    sprints.forEach(s => { html += `<th style="width:${Math.floor(40/sprints.length)}%">Sprint ${s.num}<br>(${s.fecha})</th>`; });
+    html += `<th style="width:7%">Valor Real</th><th style="width:5%">Semáforo</th></tr>`;
+    document.getElementById("tableHead").innerHTML = html;
+}
+
+function renderSprintInputs(objIndex, sprintNum, obj) {
+    const bloqueados = obj.bloquearSprints || [];
+    const vacios = obj.vaciarSprints || [];
+    const estaBloqueado = bloqueados.includes(sprintNum);
+    const estaVacio = vacios.includes(sprintNum);
+    let html = '';
+    obj.metricas.forEach((m, mIdx) => {
+        const val = m[`val${sprintNum}`] || 0;
+        const meta = m.metas[sprintNum] || 0;
+        const esInfo = m.informativo;
+        const sufijo = esInfo ? '' : '%';
+        // No mostrar meta si es 0 o no aplica
+        let metaTexto = '';
+        if (esInfo) metaTexto = 'Info';
+        else if (meta > 0) metaTexto = `${meta}%`;
+        else metaTexto = '';
+
+        if (estaVacio) {
+            // Completamente vacío - nada
+            html += '';
+        } else if (estaBloqueado) {
+            // Sprint bloqueado: input gris deshabilitado con label visible
+            if (obj.metricas.length > 1 && metaTexto) html += `<span class="metrica-label">${m.nombre} | ${metaTexto}</span>`;
+            else if (obj.metricas.length > 1 && !metaTexto) html += `<span class="metrica-label">${m.nombre}</span>`;
+            else if (metaTexto) html += `<span class="metrica-label">${metaTexto}</span>`;
+            html += `<div class="metrica-row"><input type="number" class="sprint-input" value="" disabled style="background:#eee;color:#bbb;border-color:#e5e7eb;pointer-events:none;"><span style="display:inline-block;width:10px;text-align:left;">${sufijo}</span></div>`;
+        } else if (meta === 0 && !esInfo) {
+            // Meta 0: completamente vacío
+            html += '';
+        } else {
+            if (obj.metricas.length > 1 && metaTexto) html += `<span class="metrica-label">${m.nombre} | ${metaTexto}</span>`;
+            else if (obj.metricas.length > 1 && !metaTexto) html += `<span class="metrica-label">${m.nombre}</span>`;
+            else if (metaTexto) html += `<span class="metrica-label">${metaTexto}</span>`;
+            const displayVal = val > 0 ? val : '';
+            html += `<div class="metrica-row"><input type="number" class="sprint-input" min="0" max="${esInfo?'9999':'100'}" value="${displayVal}" onchange="onMetricaChange(${objIndex},${mIdx},${sprintNum},this.value)" oninput="onMetricaChange(${objIndex},${mIdx},${sprintNum},this.value)"><span style="display:inline-block;width:10px;text-align:left;">${sufijo}</span></div>`;
+        }
+    });
+    return html;
+}
+
+function renderTable() {
+    const objetivos = getObjetivos();
+    const sprints = getSprints();
+    const hasCierreJul = objetivos.some(o => o.arrastrado);
+    const tbody = document.getElementById("tableBody");
+    tbody.innerHTML = "";
+    let lastOg = "", ogIndex = 0;
+
+    objetivos.forEach((obj, index) => {
+        const row = document.createElement("tr");
+        if (obj.og !== lastOg) { ogIndex++; lastOg = obj.og; }
+        if (ogIndex % 2 === 1) row.style.backgroundColor = "#f2f2f5";
+        const metaFormatted = obj.noAplica ? '<span class="na-badge">N/A</span>' : (obj.metaMes || obj.metaJulio || "").replace(/\n/g, "<br>");
+        const valorReal = calcularValorReal(obj, sprints);
+        const semaforo = calcularSemaforoObj(obj, sprints);
+        const metricasDesc = obj.ocultarMetricas ? '' : obj.metricas.map(m => `• ${m.nombre}${m.informativo?' (info)':''}`).join("<br>");
+        if (obj.noAplica) row.classList.add("na-row");
+
+        let ogCell = '';
+        const isFirst = index === 0 || objetivos[index-1].og !== obj.og;
+        if (isFirst) { const count = objetivos.filter(o => o.og === obj.og).length; ogCell = `<td class="og-col" rowspan="${count}">${obj.og}</td>`; }
+
+        let badge = '';
+        if (obj.esNuevo) badge = '<span class="nuevo-badge">NUEVO</span>';
+        if (obj.arrastrado) badge = '<span class="arrastre-badge">Julio</span>';
+
+        let cierreJulCell = '';
+        if (hasCierreJul) {
+            if (obj.arrastrado) {
+                const cjVal = obj.metricas.length > 0 ? (obj.metricas[0].cierreJul || 0) : 0;
+                cierreJulCell = `<td class="cierre-jul-col"><div style="display:flex;align-items:center;justify-content:center;gap:2px;"><input type="number" class="cierre-jul-input" min="0" max="100" value="${cjVal}" onchange="onCierreJulChange(${index},this.value)"><span style="font-size:11px;color:#4a0e8f;font-weight:600;">%</span></div></td>`;
+            } else {
+                cierreJulCell = `<td class="cierre-jul-col"></td>`;
+            }
+        }
+
+        let sprintCells = '';
+        sprints.forEach(s => { sprintCells += `<td class="sprint-col">${renderSprintInputs(index, s.num, obj)}</td>`; });
+
+        row.innerHTML = `<td style="text-align:center;font-weight:700;color:#4a0e8f;">${index+1}</td>${ogCell}<td class="objetivo-col"><div class="titulo">${obj.titulo}${badge}</div><div class="metas">${metricasDesc}</div></td>${cierreJulCell}<td class="meta-col">${metaFormatted}</td>${sprintCells}<td class="valor-real"><span id="valor-real-${index}" style="font-size:16px;">${valorReal===null?'—':valorReal+'%'}</span><div class="progress-bar"><div id="progress-${index}" class="progress-fill ${getProgressClass(semaforo)}" style="width:${valorReal===null?0:Math.min(valorReal,100)}%"></div></div></td><td class="semaforo-col"><span id="semaforo-${index}" class="semaforo ${semaforo}"></span></td>`;
+        tbody.appendChild(row);
+    });
+    actualizarAvanceGeneral();
+}
+
+// ============================================================
+// INTERACCIÓN
+// ============================================================
+function onMetricaChange(objIndex, metricaIndex, sprintNum, value) {
+    const obj = getObjetivos()[objIndex];
+    obj.metricas[metricaIndex][`val${sprintNum}`] = parseFloat(value) || 0;
+    const sprints = getSprints();
+    const valorReal = calcularValorReal(obj, sprints);
+    const semaforo = calcularSemaforoObj(obj, sprints);
+    const el = document.getElementById(`valor-real-${objIndex}`);
+    if (el) el.textContent = valorReal === null ? '—' : valorReal + '%';
+    const se = document.getElementById(`semaforo-${objIndex}`);
+    if (se) se.className = `semaforo ${semaforo}`;
+    const pe = document.getElementById(`progress-${objIndex}`);
+    if (pe) { pe.className = `progress-fill ${getProgressClass(semaforo)}`; pe.style.width = `${valorReal===null?0:Math.min(valorReal,100)}%`; }
+    actualizarAvanceGeneral();
+    guardarDatosDebounce();
+}
+
+function onCierreJulChange(objIndex, value) {
+    const obj = getObjetivos()[objIndex];
+    obj.metricas.forEach(m => { m.cierreJul = parseFloat(value) || 0; });
+    guardarDatosDebounce();
+}
+
+function cambiarMes() {
+    mesActual = document.querySelector('.mes-btn.active') ? mesActual : "agosto";
+    document.getElementById("mainTitle").textContent = `🎯 Seguimiento de Objetivos Q3 — ${MESES_LABEL[mesActual]}`;
+    const objetivos = getObjetivos();
+    const sprints = getSprints();
+    initValores(objetivos, sprints);
+    cargarDatosLocal();
+    renderHeader();
+    renderTable();
+    renderDashboardResumen();
+    renderMesBotones();
+}
+
+function seleccionarMes(mes) {
+    mesActual = mes;
+    document.getElementById("mainTitle").textContent = `🎯 Seguimiento de Objetivos Q3 — ${MESES_LABEL[mesActual]}`;
+    const objetivos = getObjetivos();
+    const sprints = getSprints();
+    initValores(objetivos, sprints);
+    cargarDatosLocal();
+    renderHeader();
+    renderTable();
+    renderDashboardResumen();
+    renderMesBotones();
+}
+
+function renderMesBotones() {
+    const container = document.getElementById("mesBotones");
+    const meses = ["julio", "agosto", "septiembre"];
+    container.innerHTML = meses.map(m => `<button class="mes-btn ${m===mesActual?'active':''}" onclick="seleccionarMes('${m}')">${m.charAt(0).toUpperCase()+m.slice(1)}</button>`).join('');
+}
+
+function calcularAvancePorOG(mes) {
+    const objetivos = OBJETIVOS_POR_MES[mes] || [];
+    const sprints = SPRINTS_POR_MES[mes] || [];
+    const ogMap = {};
+    objetivos.forEach(obj => {
+        if (obj.noAplica || obj.arrastrado) return;
+        const ogShort = obj.og.substring(0, obj.og.indexOf(':') + 1).trim();
+        if (!ogMap[ogShort]) ogMap[ogShort] = [];
+        const val = calcularValorReal(obj, sprints);
+        if (val !== null) ogMap[ogShort].push(val);
+    });
+    const result = [];
+    Object.keys(ogMap).forEach(og => {
+        const vals = ogMap[og];
+        const avg = vals.length > 0 ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length) : 0;
+        result.push({ og, avg });
+    });
+    return result;
+}
+
+function calcularAvanceMes(mes) {
+    const objetivos = OBJETIVOS_POR_MES[mes] || [];
+    const sprints = SPRINTS_POR_MES[mes] || [];
+    let suma = 0, count = 0;
+    objetivos.forEach(obj => {
+        if (obj.noAplica || obj.arrastrado) return;
+        // Encontrar sprint más reciente con dato
+        let sprintActivo = null;
+        for (let i = sprints.length - 1; i >= 0; i--) {
+            const key = `val${sprints[i].num}`;
+            for (const m of obj.metricas) {
+                if (m.informativo) continue;
+                if ((m[key] || 0) > 0) { sprintActivo = sprints[i].num; break; }
+            }
+            if (sprintActivo) break;
+        }
+        if (!sprintActivo) return;
+        // Cada métrica individual cuenta como un ítem
+        obj.metricas.forEach(m => {
+            if (m.informativo) return;
+            const val = m[`val${sprintActivo}`] || 0;
+            suma += val;
+            count++;
+        });
+    });
+    return count > 0 ? Math.round(suma / count * 10) / 10 : 0;
+}
+
+const BARRA_COLORES = ['#f59e0b','#ef4444','#22c55e','#60a5fa','#7c3aed','#ec4899','#14b8a6'];
+
+function renderDashboardResumen() {
+    const container = document.getElementById("dashboardResumen");
+    const avanceActual = calcularAvanceMes(mesActual);
+
+    container.innerHTML = `
+        <div class="resumen-section">
+            <div class="promedio-valor">${avanceActual}%</div>
+            <div class="promedio-label">Promedio General de Cumplimiento — ${MESES_LABEL[mesActual]}</div>
+        </div>`;
+}
+
+// ============================================================
+// PERSISTENCIA LOCAL + JSONBIN
 // ============================================================
 const JSONBIN_CONFIG = {
     binId: "6a5fed21f5f4af5e29ae6b6b",
     apiKey: "$2a$10$yQ7KdQ4xrm/jzeSCnB7nD.9McPbiMyJUB8.zOo3catOQaRDty./8W"
 };
 
-// Estado global de sincronización
 let usuarioEditando = false;
 let debounceTimer = null;
 let ultimoUpdatedAt = null;
-let syncInterval = null;
-
-// Obtener nombre del usuario (deshabilitado)
-function obtenerNombreUsuario() {
-    return "";
-}
 
 function getJsonBinConfig() {
-    if (JSONBIN_CONFIG.binId !== "TU_BIN_ID_AQUI" && JSONBIN_CONFIG.apiKey !== "TU_API_KEY_AQUI") {
-        return JSONBIN_CONFIG;
-    }
+    if (JSONBIN_CONFIG.binId && JSONBIN_CONFIG.apiKey && JSONBIN_CONFIG.binId !== "TU_BIN_ID_AQUI") return JSONBIN_CONFIG;
     return null;
 }
 
-function actualizarStatusUI(texto, color) {
-    const el = document.getElementById("syncStatus");
-    if (el) { el.textContent = texto; el.style.color = color || "#666"; }
+function obtenerDatosGuardar() {
+    const result = {};
+    Object.keys(OBJETIVOS_POR_MES).forEach(mes => {
+        result[mes] = OBJETIVOS_POR_MES[mes].map(o => o.metricas.map(m => {
+            const d = { cierreJul: m.cierreJul || 0 };
+            (SPRINTS_POR_MES[mes] || []).forEach(s => { d[`val${s.num}`] = m[`val${s.num}`] || 0; });
+            return d;
+        }));
+    });
+    return result;
 }
 
-function actualizarFooterInfo(updatedAt, updatedBy) {
-    const el = document.getElementById("footerInfo");
-    if (!el) return;
-    if (updatedAt) {
-        const fecha = new Date(updatedAt);
-        const fechaStr = fecha.toLocaleDateString("es-EC", { day: "2-digit", month: "2-digit", year: "numeric" });
-        const horaStr = fecha.toLocaleTimeString("es-EC", { hour: "2-digit", minute: "2-digit" });
-        el.textContent = `Última actualización: ${fechaStr} ${horaStr}`;
-    } else {
-        el.textContent = "Última actualización: —";
-    }
-}
-
-function obtenerDatosActuales() {
-    return objetivos.map(o => o.metricas.map(m => ({ val29: m.val29, val30: m.val30, val31: m.val31 })));
-}
-
-function datosIguales(a, b) {
-    return JSON.stringify(a) === JSON.stringify(b);
-}
-
-// Guardar en localStorage
-function guardarLocal(datos) {
-    localStorage.setItem("objetivos_metricas_postventa_v4", JSON.stringify(datos));
-}
-
-// Cargar desde localStorage
-function cargarDatos() {
-    const guardados = localStorage.getItem("objetivos_metricas_postventa_v4");
-    if (guardados) {
-        aplicarDatos(JSON.parse(guardados));
-    }
-}
-
-function aplicarDatos(datos) {
-    datos.forEach((metricas, i) => {
-        if (i < objetivos.length) {
-            metricas.forEach((m, j) => {
-                if (j < objetivos[i].metricas.length) {
-                    objetivos[i].metricas[j].val29 = m.val29 || 0;
-                    objetivos[i].metricas[j].val30 = m.val30 || 0;
-                    objetivos[i].metricas[j].val31 = m.val31 || 0;
-                }
+function aplicarDatosCargados(data) {
+    Object.keys(data).forEach(mes => {
+        const objs = OBJETIVOS_POR_MES[mes];
+        if (!objs) return;
+        const metricas = data[mes];
+        metricas.forEach((mArr, i) => {
+            if (i >= objs.length) return;
+            mArr.forEach((mData, j) => {
+                if (j >= objs[i].metricas.length) return;
+                Object.keys(mData).forEach(k => { objs[i].metricas[j][k] = mData[k]; });
             });
-        }
+        });
     });
 }
 
-// Debounce para guardar (500ms)
-function guardarDatosDebounce() {
-    if (debounceTimer) clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => {
-        const datos = obtenerDatosActuales();
-        guardarLocal(datos);
-        guardarEnNube(datos);
-    }, 500);
+function guardarLocal() {
+    localStorage.setItem("objetivos_q3_v5", JSON.stringify(obtenerDatosGuardar()));
 }
 
-// Guardar en JSONBin
-async function guardarEnNube(datos) {
+function cargarDatosLocal() {
+    const raw = localStorage.getItem("objetivos_q3_v5");
+    if (raw) aplicarDatosCargados(JSON.parse(raw));
+}
+
+function guardarDatosDebounce() {
+    if (debounceTimer) clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => { guardarLocal(); guardarEnNube(); }, 500);
+}
+
+function actualizarStatusUI(t, c) { const el = document.getElementById("syncStatus"); if(el){el.textContent=t;el.style.color=c||"#666";} }
+function actualizarFooterInfo(updatedAt) {
+    const el = document.getElementById("footerInfo");
+    if (!el) return;
+    if (updatedAt) { const f = new Date(updatedAt); el.textContent = `Última actualización: ${f.toLocaleDateString("es-EC")} ${f.toLocaleTimeString("es-EC",{hour:"2-digit",minute:"2-digit"})}`; }
+    else el.textContent = "Última actualización: —";
+}
+
+async function guardarEnNube() {
     const config = getJsonBinConfig();
     if (!config) return;
     try {
-        actualizarStatusUI("🟡 Guardando...", "#f59e0b");
-        const nombre = obtenerNombreUsuario();
+        actualizarStatusUI("🟡 Guardando...","#f59e0b");
         const ahora = new Date().toISOString();
         const res = await fetch(`https://api.jsonbin.io/v3/b/${config.binId}`, {
             method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                "X-Master-Key": config.apiKey
-            },
-            body: JSON.stringify({ metricas: datos, updatedAt: ahora, updatedBy: nombre })
+            headers: { "Content-Type": "application/json", "X-Master-Key": config.apiKey },
+            body: JSON.stringify({ datos: obtenerDatosGuardar(), updatedAt: ahora })
         });
-        if (res.ok) {
-            ultimoUpdatedAt = ahora;
-            actualizarStatusUI("🟢 Conectado", "#22c55e");
-            actualizarFooterInfo(ahora, nombre);
-        } else {
-            actualizarStatusUI("🔴 Error al guardar", "#ef4444");
-        }
-    } catch(e) {
-        actualizarStatusUI("🔴 Sin conexión", "#ef4444");
-    }
+        if (res.ok) { ultimoUpdatedAt = ahora; actualizarStatusUI("🟢 Conectado","#22c55e"); actualizarFooterInfo(ahora); }
+        else actualizarStatusUI("🔴 Error al guardar","#ef4444");
+    } catch(e) { actualizarStatusUI("🔴 Sin conexión","#ef4444"); }
 }
 
-// Cargar desde JSONBin
-async function cargarDesdeNube(forzarRender) {
+async function cargarDesdeNube(forzar) {
     const config = getJsonBinConfig();
     if (!config) return false;
     try {
-        if (!forzarRender) actualizarStatusUI("🔵 Sincronizando...", "#60a5fa");
-        const res = await fetch(`https://api.jsonbin.io/v3/b/${config.binId}/latest`, {
-            headers: { "X-Master-Key": config.apiKey }
-        });
+        if (!forzar) actualizarStatusUI("🔵 Sincronizando...","#60a5fa");
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${config.binId}/latest`, { headers: { "X-Master-Key": config.apiKey } });
         if (res.ok) {
             const json = await res.json();
             const record = json.record;
-            const datos = record.metricas;
-            const remoteUpdatedAt = record.updatedAt || null;
-            const remoteUpdatedBy = record.updatedBy || null;
-
-            if (!datos) {
-                actualizarStatusUI("🟢 Conectado", "#22c55e");
-                return false;
-            }
-
-            // Solo actualizar si hay cambios reales
-            if (remoteUpdatedAt && remoteUpdatedAt !== ultimoUpdatedAt) {
-                const datosLocales = obtenerDatosActuales();
-                if (!datosIguales(datos, datosLocales)) {
-                    aplicarDatos(datos);
-                    guardarLocal(datos);
-                    ultimoUpdatedAt = remoteUpdatedAt;
-                    actualizarFooterInfo(remoteUpdatedAt, remoteUpdatedBy);
-                    actualizarStatusUI("🟢 Conectado", "#22c55e");
-                    return true; // Indica que hay que re-renderizar
-                } else {
-                    ultimoUpdatedAt = remoteUpdatedAt;
+            if (record && record.datos) {
+                const remoteAt = record.updatedAt || null;
+                if (remoteAt && remoteAt !== ultimoUpdatedAt) {
+                    const localStr = JSON.stringify(obtenerDatosGuardar());
+                    const remoteStr = JSON.stringify(record.datos);
+                    if (localStr !== remoteStr) {
+                        aplicarDatosCargados(record.datos);
+                        guardarLocal();
+                        ultimoUpdatedAt = remoteAt;
+                        actualizarFooterInfo(remoteAt);
+                        actualizarStatusUI("🟢 Conectado","#22c55e");
+                        return true;
+                    }
+                    ultimoUpdatedAt = remoteAt;
                 }
+                actualizarFooterInfo(record.updatedAt);
             }
-
-            actualizarFooterInfo(remoteUpdatedAt, remoteUpdatedBy);
-            actualizarStatusUI("🟢 Conectado", "#22c55e");
-            return forzarRender;
+            actualizarStatusUI("🟢 Conectado","#22c55e");
+            return forzar;
         }
-        actualizarStatusUI("🔴 Error de conexión", "#ef4444");
-    } catch(e) {
-        actualizarStatusUI("🔴 Sin conexión", "#ef4444");
-    }
+        actualizarStatusUI("🔴 Error conexión","#ef4444");
+    } catch(e) { actualizarStatusUI("🔴 Sin conexión","#ef4444"); }
     return false;
 }
 
-// Sincronización manual
-async function sincronizarManual() {
-    const necesitaRender = await cargarDesdeNube(true);
-    if (necesitaRender) {
-        filterTable();
-    }
-}
+async function sincronizarManual() { const r = await cargarDesdeNube(true); if(r) renderTable(); }
 
-// Sincronización automática cada 10 segundos
-function iniciarSyncAutomatico() {
-    const config = getJsonBinConfig();
-    if (!config) return;
-    syncInterval = setInterval(async () => {
-        if (usuarioEditando) return; // No sincronizar mientras edita
-        const necesitaRender = await cargarDesdeNube(false);
-        if (necesitaRender) {
-            filterTable();
-        }
+function iniciarSync() {
+    if (!getJsonBinConfig()) return;
+    setInterval(async () => {
+        if (usuarioEditando) return;
+        const r = await cargarDesdeNube(false);
+        if (r) renderTable();
     }, 10000);
 }
 
-// Detectar cuando el usuario está editando
-document.addEventListener("focusin", function(e) {
-    if (e.target && e.target.classList && e.target.classList.contains("sprint-input")) {
-        usuarioEditando = true;
-    }
-});
-document.addEventListener("focusout", function(e) {
-    if (e.target && e.target.classList && e.target.classList.contains("sprint-input")) {
-        usuarioEditando = false;
-    }
-});
+document.addEventListener("focusin", e => { if(e.target && e.target.classList.contains("sprint-input")) usuarioEditando=true; });
+document.addEventListener("focusout", e => { if(e.target && e.target.classList.contains("sprint-input")) usuarioEditando=false; });
 
-// Inicialización
+// ============================================================
+// INICIALIZACIÓN
+// ============================================================
 async function inicializarApp() {
-    cargarDatos(); // Cargar local primero
+    Object.keys(OBJETIVOS_POR_MES).forEach(mes => { initValores(OBJETIVOS_POR_MES[mes], SPRINTS_POR_MES[mes] || []); });
+    cargarDatosLocal();
     const config = getJsonBinConfig();
     if (config) {
         document.getElementById("btnSync").style.display = "inline-block";
-        const necesitaRender = await cargarDesdeNube(true);
-        if (necesitaRender) {
-            renderTable(objetivos);
-        } else {
-            renderTable(objetivos);
-        }
-        iniciarSyncAutomatico();
-    } else {
-        actualizarStatusUI("⚠️ JSONBin no configurado — editá JSONBIN_CONFIG en el HTML", "#f59e0b");
-        renderTable(objetivos);
+        const r = await cargarDesdeNube(true);
     }
+    renderMesBotones();
+    renderHeader();
+    renderTable();
+    renderDashboardResumen();
+    document.getElementById("mainTitle").textContent = `🎯 Seguimiento de Objetivos Q3 — ${MESES_LABEL[mesActual]}`;
+    iniciarSync();
 }
-
 inicializarApp();
-
-function renderSprintInputs(objIndex, sprint) {
-    const obj = objetivos[objIndex];
-    const metaKey = sprint.replace('val', 'meta');
-    const sprintNum = parseInt(sprint.replace('val', ''));
-    const iniciaSprint = obj.iniciaSprint || 29;
-    const bloquearSprints = obj.bloquearSprints || [];
-    const estaBloqueado = bloquearSprints.includes(sprintNum);
-    let html = '';
-
-    if (sprintNum < iniciaSprint) {
-        html = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#d1d5db;font-size:12px;">—</div>`;
-        return html;
-    }
-
-    obj.metricas.forEach((m, mIdx) => {
-        const val = m[sprint] || 0;
-        const meta = m[metaKey] || 0;
-        const esInformativo = m.informativo;
-        const sufijo = esInformativo ? '' : '%';
-        const metaTexto = esInformativo ? 'Info' : `${meta}%`;
-
-        if (obj.metricas.length > 1) {
-            html += `<span class="metrica-label">${m.nombre} | ${metaTexto}</span>`;
-        } else {
-            html += `<span class="metrica-label">${metaTexto}</span>`;
-        }
-
-        if (estaBloqueado) {
-            html += `<div class="metrica-row">
-                <input type="number" class="sprint-input" value="0" disabled style="background:#eee;color:#bbb;border-color:#e5e7eb;pointer-events:none;">
-                <span style="display:inline-block;width:10px;text-align:left;">${sufijo}</span>
-            </div>`;
-        } else {
-            html += `<div class="metrica-row">
-                <input type="number" class="sprint-input" min="0" max="${esInformativo ? '9999' : '100'}" value="${val}"
-                    onchange="onMetricaChange(${objIndex}, ${mIdx}, '${sprint}', this.value)"
-                    oninput="onMetricaChange(${objIndex}, ${mIdx}, '${sprint}', this.value)">
-                <span style="display:inline-block;width:10px;text-align:left;">${sufijo}</span>
-            </div>`;
-        }
-    });
-    return html;
-}
-
-function renderTable(data) {
-    const tbody = document.getElementById("tableBody");
-    tbody.innerHTML = "";
-
-    let lastOg = "";
-    let ogIndex = 0;
-
-    data.forEach((obj, index) => {
-        const row = document.createElement("tr");
-        row.setAttribute("data-celula", obj.celula);
-
-        if (obj.og !== lastOg) {
-            ogIndex++;
-            lastOg = obj.og;
-        }
-
-        // OG impares (1, 3) con fondo gris
-        if (ogIndex % 2 === 1) {
-            row.style.backgroundColor = "#f2f2f5";
-        }
-
-        const metaJulioFormatted = obj.noAplicaJulio
-            ? `<span class="na-badge">N/A</span>`
-            : obj.metaJulio.replace(/\n/g, "<br>");
-        const valorReal = obj.noAplicaJulio ? null : calcularValorReal(obj);
-        const semaforo = obj.noAplicaJulio ? "blue" : calcularSemaforoObj(obj);
-        const metricasDesc = obj.ocultarMetricas ? '' : obj.metricas.map(m => `• ${m.nombre}${m.informativo ? ' (info)' : ''}`).join("<br>");
-
-        if (obj.noAplicaJulio) row.classList.add("na-row");
-
-        // Calcular rowspan para OG
-        let ogCell = '';
-        const isFirstInGroup = index === 0 || data[index - 1].og !== obj.og;
-        if (isFirstInGroup) {
-            const count = data.filter(o => o.og === obj.og).length;
-            ogCell = `<td class="og-col" rowspan="${count}">${obj.og}</td>`;
-        }
-
-        row.innerHTML = `
-            <td style="text-align:center; font-weight:700; color:#4a0e8f;">${index + 1}</td>
-            ${ogCell}
-            <td class="objetivo-col">
-                <div class="titulo">${obj.titulo}${obj.esNuevo ? '<span class="nuevo-badge">NUEVO</span>' : ''}</div>
-                <div class="metas">${metricasDesc}</div>
-            </td>
-            <td class="meta-col">${metaJulioFormatted}</td>
-            <td class="sprint-col">${renderSprintInputs(index, 'val29')}</td>
-            <td class="sprint-col">${renderSprintInputs(index, 'val30')}</td>
-            <td class="sprint-col">${renderSprintInputs(index, 'val31')}</td>
-            <td class="valor-real">
-                <span id="valor-real-${index}" style="font-size:16px;">${valorReal === null ? '—' : valorReal + '%'}</span>
-                <div class="progress-bar">
-                    <div id="progress-${index}" class="progress-fill ${getProgressClass(semaforo)}" style="width: ${valorReal === null ? 0 : Math.min(valorReal, 100)}%"></div>
-                </div>
-            </td>
-            <td class="semaforo-col">
-                <span id="semaforo-${index}" class="semaforo ${semaforo}"></span>
-            </td>`;
-        tbody.appendChild(row);
-    });
-}
-
-function filterTable() {
-    const filter = document.getElementById("filterCelula").value;
-    if (filter === "TODAS") {
-        renderTable(objetivos);
-    } else {
-        renderTable(objetivos.filter(o => o.celula === filter));
-    }
-}
-
-// La inicialización ya se ejecutó en inicializarApp()
 </script>
 </body>
 </html>
